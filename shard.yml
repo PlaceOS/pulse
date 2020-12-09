@@ -9,6 +9,9 @@ crystal: 0.35.1
 license: MIT
 
 dependencies:
+  placeos:
+    github: placeos/crystal-client
+  
   placeos-models:
     github: placeos/models
     version: ~> 4
@@ -16,3 +19,12 @@ dependencies:
   tasker:
     github: spider-gazelle/tasker
     version: ~> 2
+
+  ulid:
+    github: place-labs/ulid
+
+  hashcash:
+    github: place-labs/hashcash
+    branch: code-review
+
+  
