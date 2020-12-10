@@ -11,7 +11,8 @@ module Pulse
     Hashcash.generate(resource)
   end
 
-  users_email = "gab@place.technology"
+  puts "enter you email to connect with PlaceOS Client Portal"
+  users_email = gets || ""
 
   
   def build_json_blob(users_email)
@@ -32,16 +33,17 @@ module Pulse
   # systems = PlaceOS::Model::System
   # puts systems
 
-  modules = PlaceOS::Model::Module.all
+  modules = PlaceOS::Model::Module.elastic
   puts modules
 
 
   json_blob = {
     "instance_id" => "put_instance_id_here???",
+    "instance_primary_contact" => "#{users_email}",
     "proof_of_work": "#{generate_proof_of_work(users_email)}"
   }.to_json
 
-  # puts json_blob
+  puts json_blob
 
   heartbeat_json = {
     "instance_id" => "put_instance_id_here???",
@@ -50,7 +52,7 @@ module Pulse
     "users_qty" => users_count
   }.to_json
 
-  # puts heartbeat_json
+  puts heartbeat_json
 
   # puts model
   # capture user email??
