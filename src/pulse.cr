@@ -18,21 +18,40 @@ module Pulse
   
   end
   
-  json_blob = {
+  
 
-    "proof_of_work": "#{generate_proof_of_work(users_email)}"
-  }
-
-
-  model = PlaceOS::Model::Driver.count
-
-  puts model
+  drivers_count = PlaceOS::Model::Driver.count
 
   # systems_count = PlaceOS::Model::System.count
   # put systems_count
 
   zones_count = PlaceOS::Model::Zone.count
-  puts zones_count
+
+  users_count = PlaceOS::Model::User.count
+
+  # systems = PlaceOS::Model::System
+  # puts systems
+
+  modules = PlaceOS::Model::Module.all
+  puts modules
+
+
+  json_blob = {
+    "instance_id" => "put_instance_id_here???",
+    "proof_of_work": "#{generate_proof_of_work(users_email)}"
+  }.to_json
+
+  # puts json_blob
+
+  heartbeat_json = {
+    "instance_id" => "put_instance_id_here???",
+    "drivers_qty" => drivers_count,
+    "zones_qty" => zones_count,
+    "users_qty" => users_count
+  }.to_json
+
+  # puts heartbeat_json
+
   # puts model
   # capture user email??
   # capture instance domain
