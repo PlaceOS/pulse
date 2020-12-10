@@ -62,6 +62,8 @@ module Pulse
   # post started up to client portal 
 
 
+
+
   # post heartbeat to portal
 
 # get zones - count the number
