@@ -16,35 +16,23 @@ module Pulse
   end
   
   
-
-  drivers_count = PlaceOS::Model::Driver.count
-
-  # systems_count = PlaceOS::Model::System.count
-  # put systems_count
-
-  zones_count = PlaceOS::Model::Zone.count
-
-  users_count = PlaceOS::Model::User.count
-
-  # systems = PlaceOS::Model::System
-  # puts systems
-
-  modules = PlaceOS::Model::Module.elastic
-  # puts modules
-
-
   
 
-  # puts json_blob
+  def self.send_heartbeat
+    drivers_count = PlaceOS::Model::Driver.count
+    zones_count = PlaceOS::Model::Zone.count
+    users_count = PlaceOS::Model::User.count
+    # modules = PlaceOS::Model::Module.elastic
 
-  heartbeat_json = {
-    "instance_id" => "put_instance_id_here???",
-    "drivers_qty" => drivers_count,
-    "zones_qty" => zones_count,
-    "users_qty" => users_count
-  }.to_json
+    heartbeat_json = {
+      "instance_id" => "put_instance_id_here???",
+      "drivers_qty" => drivers_count,
+      "zones_qty" => zones_count,
+      "users_qty" => users_count
+    }.to_json
 
-  # puts heartbeat_json
+    HTTP::Client.post "#{CLIENT_PORTAL_URI}/instances", body: heartbeat_json
+  end
 
   def self.setup
     puts "enter you email to connect with PlaceOS Client Portal"
@@ -92,5 +80,5 @@ end
 
 include Pulse
 
-Pulse.setup
+Pulse.send_heartbeat
 
