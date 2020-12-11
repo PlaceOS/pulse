@@ -42,12 +42,6 @@ module Pulse
     HTTP::Client.post "#{CLIENT_PORTAL_URI}/instances/#{instance_id}/setup", body: json_blob
   end
 
-  # puts setup.response
-  # puts model
-  # capture user email??
-  # capture instance domain
-  # client2 = PlaceOS::Client::API::Models
-
   # post started up to client portal
 
   # post heartbeat to portal
