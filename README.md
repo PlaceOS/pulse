@@ -20,6 +20,14 @@ PlaceOS heartbeat manager
 require "pulse"
 ```
 
+```crystal
+include Pulse
+Pulse.setup
+# => enter you email to connect with PlaceOS Client Portal
+# => **setup of instance is completed**
+```
+
+
 TODO: Write usage instructions here
 
 ## Development

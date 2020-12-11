@@ -6,13 +6,9 @@ require "rethinkdb-orm"
 require "http/client"
 
 module Pulse
-  # generate proof of work
-  def generate_proof_of_work(resource)
-    Hashcash.generate(resource)
-  end
+  CLIENT_PORTAL_URI = "http://127.0.0.1:3000"
 
-  puts "enter you email to connect with PlaceOS Client Portal"
-  users_email = gets || ""
+  
 
   
   def build_json_blob(users_email)
@@ -34,16 +30,12 @@ module Pulse
   # puts systems
 
   modules = PlaceOS::Model::Module.elastic
-  puts modules
+  # puts modules
 
 
-  json_blob = {
-    "instance_id" => "put_instance_id_here???",
-    "instance_primary_contact" => "#{users_email}",
-    "proof_of_work": "#{generate_proof_of_work(users_email)}"
-  }.to_json
+  
 
-  puts json_blob
+  # puts json_blob
 
   heartbeat_json = {
     "instance_id" => "put_instance_id_here???",
@@ -52,8 +44,24 @@ module Pulse
     "users_qty" => users_count
   }.to_json
 
-  puts heartbeat_json
+  # puts heartbeat_json
 
+  def self.setup
+    puts "enter you email to connect with PlaceOS Client Portal"
+    users_email = gets || ""
+
+    instance_id = "01ERJXRPCQ844Y1PPQPBVBR4B6"
+ 
+    json_blob = {
+      "instance_domain" => "https://localhost:3000", 
+      "instance_primary_contact" => "#{users_email}",
+      "proof_of_work": "#{generate_proof_of_work(users_email)}"
+    }.to_json
+
+    
+    HTTP::Client.post "#{CLIENT_PORTAL_URI}/instances/#{instance_id}/setup", body: json_blob
+  end
+  # puts setup.response
   # puts model
   # capture user email??
   # capture instance domain
@@ -74,11 +82,15 @@ module Pulse
 
   # cli ui - does that belong here??
 
+  # generate proof of work
+  private def generate_proof_of_work(resource)
+    Hashcash.generate(resource)
+  end
+
 
 end
 
 include Pulse
-# instance = Pulse::Instance.new("ulid", "stamp_string")
-# puts instance.generate_ulid
-# puts generate_proof_of_work("my_email")
-# puts generate_proof_of_work("my_email")
+
+Pulse.setup
+
