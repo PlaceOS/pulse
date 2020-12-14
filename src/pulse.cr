@@ -24,14 +24,15 @@ module Pulse
       "users_qty"   => users_count,
     }.to_json
 
-    HTTP::Client.post "#{CLIENT_PORTAL_URI}/instances", body: heartbeat_json
+    puts heartbeat_json 
+    # HTTP::Client.post "#{CLIENT_PORTAL_URI}/instances", body: heartbeat_json
   end
 
   def self.setup
     puts "enter you email to connect with PlaceOS Client Portal"
     users_email = gets || ""
 
-    instance_id = "01ERJXRPCQ844Y1PPQPBVBR4B6"
+    instance_id = ULID.generate
 
     json_blob = {
       "instance_domain"          => "https://localhost:3000",
@@ -60,4 +61,4 @@ end
 
 include Pulse
 
-Pulse.send_heartbeat
+Pulse.setup
