@@ -26,5 +26,7 @@ dependencies:
   hashcash:
     github: place-labs/hashcash
     branch: code-review
-
+  
+  secrets-env:
+    github: place-labs/secrets-env
   

@@ -4,6 +4,7 @@ require "hashcash"
 require "placeos"
 require "rethinkdb-orm"
 require "http/client"
+require "./constants"
 
 module Pulse
   CLIENT_PORTAL_URI = "http://127.0.0.1:3000"
@@ -12,26 +13,39 @@ module Pulse
   end
 
   def self.send_heartbeat
+
+    # find instance_id
     drivers_count = PlaceOS::Model::Driver.count
     zones_count = PlaceOS::Model::Zone.count
     users_count = PlaceOS::Model::User.count
+    staff_api = PlaceOS::Model::Repository.exists?("staff_api") # this is a guess idk if it works
     # modules = PlaceOS::Model::Module.elastic
 
     heartbeat_json = {
-      "instance_id" => "put_instance_id_here???",
-      "drivers_qty" => drivers_count,
-      "zones_qty"   => zones_count,
-      "users_qty"   => users_count,
+      # find instance_id
+      "instance_id" => "#{App::PLACEOS_INSTANCE_ID}",
+      "drivers_qty" => drivers_count.to_s,
+      "zones_qty"   => zones_count.to_s,
+      "users_qty"   => users_count.to_s,
+      "staff_api" => staff_api.to_s,
+
+      # find instance_type
+      # find staff_api
+      # find analytics
+
+      "instance_type" => "production"
     }.to_json
 
     puts heartbeat_json 
-    # HTTP::Client.post "#{CLIENT_PORTAL_URI}/instances", body: heartbeat_json
+    HTTP::Client.post "#{CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}", body: heartbeat_json
   end
 
   def self.setup
-    puts "enter you email to connect with PlaceOS Client Portal"
+    puts "Enter you email to connect with PlaceOS Client Portal"
     users_email = gets || ""
 
+    # TODO instance_id will not be generated here - or in Pulse service at all
+    # store as env var??
     instance_id = ULID.generate
 
     json_blob = {
@@ -62,3 +76,4 @@ end
 include Pulse
 
 Pulse.setup
+# puts generate_proof_of_work("gab@place.technology")
