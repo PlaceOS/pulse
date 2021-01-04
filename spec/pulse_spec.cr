@@ -11,26 +11,27 @@ describe Pulse do
     link.should eq "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}/setup"
   end
 
-  it "should generate a proof of work" do
-    proof_of_work = generate_proof_of_work("myemail@mail.com")
+  # it "should generate a proof of work" do
+  #   proof_of_work = generate_proof_of_work("myemail@mail.com")
 
-    proof_of_work.should be_a String
-    proof_of_work.should contain ":myemail@mail.com::"
-    proof_of_work.size.should be_close(63, 3)
-    proof_of_work.should start_with "1:22:"
-  end
+    
+  # end
 
   it "should form up json blob for setup" do
     setup_json = setup_json("https://localhost:3000", "gab@place.technology")
     setup_json.should be_a String
-    setup_json.should start_with "{\"instance_primary_contact\":\"gab@place.technology\",\"proof_of_work\":\"1:22:"
-    setup_json.should end_with ",\"instance_domain\":\"https://localhost:3000\"}"
-
+    setup_json.should start_with "{\"instance_primary_contact\":\"gab@place.technology\",\"instance_domain\":\"https://localhost:3000\",\"proof_of_work\":\"1:22:"
+    
     setup_body = SetupBody.from_json(setup_json)
     setup_body.instance_domain.should eq "https://localhost:3000"
     setup_body.instance_primary_contact.should eq "gab@place.technology"
-    setup_body.proof_of_work.should start_with "1:22:"
-    setup_body.proof_of_work.size.should be_close(65, 5)
+    
+    # should generate a proof of work
+    proof_of_work = setup_body.proof_of_work
+    proof_of_work.should be_a String
+    proof_of_work.should contain ":gab@place.technology::"
+    proof_of_work.size.should be_close(67, 3)
+    proof_of_work.should start_with "1:22:"
   end
 
   # test high level setup method
@@ -40,7 +41,7 @@ describe Pulse do
       .to_return(status: 201, body: "")
 
     setup = Pulse.setup("gab@place.technology")
-    # is this actually testing my code?
+    # is this actually useful?
     setup.should be_a HTTP::Client::Response
     setup.status_code.should eq 201
   end

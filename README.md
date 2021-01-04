@@ -22,10 +22,12 @@ require "pulse"
 
 ```crystal
 include Pulse
-Pulse.setup
-# => enter you email to connect with PlaceOS Client Portal
-# => **setup of instance is completed**
+Pulse.setup(users_email, instance_domain)
 ```
+
+explain the setup method here
+
+explain the heartbeat method here
 
 
 TODO: Write usage instructions here

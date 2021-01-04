@@ -56,10 +56,14 @@ module Pulse
 
   # make this a SetupBody class method?
   private def setup_json(instance_domain : String, users_email : String)
-    SetupBody.new(users_email, generate_proof_of_work(users_email), instance_domain).to_json
+    SetupBody.new(
+      users_email, 
+      # generate_proof_of_work(users_email), 
+      instance_domain
+    ).to_json
   end
 
-  private def generate_proof_of_work(resource) : String
-    Hashcash.generate(resource, bits: 22)
-  end
+  # private def generate_proof_of_work(resource) : String
+  #   Hashcash.generate(resource, bits: 22)
+  # end
 end
