@@ -15,7 +15,8 @@ module Pulse
   # TODO schedule tasks
 
   def self.send_heartbeat
-    post_to_client_portal(client_portal_link, heartbeat_json)
+    heartbeat = Heartbeat.new.to_json
+    post_to_client_portal(client_portal_link, heartbeat)
   end
 
   def self.setup(users_email : String, instance_domain = "https://localhost:3000")
