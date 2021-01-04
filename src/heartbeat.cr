@@ -15,6 +15,6 @@ class Heartbeat
     @zones_qty = PlaceOS::Model::Zone.count
     @users_qty = PlaceOS::Model::User.count
     @staff_api = true             # figure out how to find this
-    @instance_type = "production" # and this
+    @instance_type = "production" # and this # maybe an envar...
   end
 end

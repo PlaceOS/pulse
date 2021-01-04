@@ -44,11 +44,13 @@ describe Pulse do
   pending "should setup a placeos instance with a custom domain" do
     # webmock
     Pulse.setup("gab@place.technology", "customdomain.custom")
+    # TODO finish - also maybe merge this with the other webmock spec
   end
 
   it "should generate a request body for a heartbeat" do
     heartbeat_body = heartbeat_json
     heartbeat_body.should eq "{\"instance_id\":\"01EV5D3KCQ3A9S4TCGH29WHKWG\",\"drivers_qty\":0,\"zones_qty\":0,\"users_qty\":0,\"staff_api\":true,\"instance_type\":\"production\"}"
+    
     heartbeat = Heartbeat.from_json(heartbeat_body)
     heartbeat.instance_id.should eq "#{App::PLACEOS_INSTANCE_ID}"
     heartbeat.drivers_qty.should eq 0
