@@ -15,7 +15,7 @@ describe Pulse do
     setup_json.should be_a String
     setup_json.should start_with "{\"instance_primary_contact\":\"gab@place.technology\",\"instance_domain\":\"https://localhost:3000\",\"proof_of_work\":\"1:22:"
 
-    setup_body = SetupBody.from_json(setup_json)
+    setup_body = Setup.from_json(setup_json)
     setup_body.instance_domain.should eq "https://localhost:3000"
     setup_body.instance_primary_contact.should eq "gab@place.technology"
 
@@ -42,14 +42,14 @@ describe Pulse do
   end
 
   pending "should setup a placeos instance with a custom domain" do
-    # webmock?
+    # webmock
     Pulse.setup("gab@place.technology", "customdomain.custom")
   end
 
   it "should generate a request body for a heartbeat" do
     heartbeat_body = heartbeat_json
     heartbeat_body.should eq "{\"instance_id\":\"01EV5D3KCQ3A9S4TCGH29WHKWG\",\"drivers_qty\":0,\"zones_qty\":0,\"users_qty\":0,\"staff_api\":true,\"instance_type\":\"production\"}"
-    heartbeat = HeartbeatBody.from_json(heartbeat_body)
+    heartbeat = Heartbeat.from_json(heartbeat_body)
     heartbeat.instance_id.should eq "#{App::PLACEOS_INSTANCE_ID}"
     heartbeat.drivers_qty.should eq 0
     heartbeat.zones_qty.should eq 0

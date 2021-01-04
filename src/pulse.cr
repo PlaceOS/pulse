@@ -6,8 +6,8 @@ require "rethinkdb-orm"
 require "http/client"
 require "./constants"
 
-require "./setup_body"
-require "./heartbeat_body"
+require "./setup"
+require "./heartbeat"
 
 # TODO maybe separate out heartbeat and setup concerns so its not all messy in one module
 
@@ -36,10 +36,10 @@ module Pulse
 
   # make this a SetupBody class method?
   private def setup_json(instance_domain : String, users_email : String)
-    SetupBody.new(users_email, instance_domain).to_json
+    Setup.new(users_email, instance_domain).to_json
   end
 
   private def heartbeat_json
-    HeartbeatBody.new.to_json
+    Heartbeat.new.to_json
   end
 end

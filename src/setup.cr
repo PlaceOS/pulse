@@ -1,6 +1,6 @@
 require "json"
 
-class SetupBody
+class Setup
   include JSON::Serializable
   property instance_primary_contact : String
   property instance_domain : String

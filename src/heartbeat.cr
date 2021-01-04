@@ -1,6 +1,6 @@
 require "json"
 
-class HeartbeatBody
+class Heartbeat
   include JSON::Serializable
   property instance_id : String
   property drivers_qty : Int32
