@@ -6,14 +6,13 @@ require "rethinkdb-orm"
 require "http/client"
 require "./constants"
 
-module Pulse
-  CLIENT_PORTAL_URI = "http://127.0.0.1:3000"
+require "./setup_body"
 
+module Pulse
   def build_json_blob(users_email)
   end
 
   def self.send_heartbeat
-
     # find instance_id
     drivers_count = PlaceOS::Model::Driver.count
     zones_count = PlaceOS::Model::Zone.count
@@ -27,35 +26,25 @@ module Pulse
       "drivers_qty" => drivers_count.to_s,
       "zones_qty"   => zones_count.to_s,
       "users_qty"   => users_count.to_s,
-      "staff_api" => staff_api.to_s,
+      "staff_api"   => staff_api.to_s,
 
       # find instance_type
       # find staff_api
       # find analytics
 
-      "instance_type" => "production"
+      "instance_type" => "production",
     }.to_json
 
-    puts heartbeat_json 
-    HTTP::Client.post "#{CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}", body: heartbeat_json
+    puts heartbeat_json
+    HTTP::Client.post "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}", body: heartbeat_json
   end
 
-  def self.setup
-    puts "Enter you email to connect with PlaceOS Client Portal"
-    users_email = gets || ""
-
-    # TODO instance_id will not be generated here - or in Pulse service at all
-    # store as env var??
-    instance_id = ULID.generate
-
-    json_blob = {
-      "instance_domain"          => "https://localhost:3000",
-      "instance_primary_contact" => "#{users_email}",
-      "proof_of_work":              "#{generate_proof_of_work(users_email)}",
-    }.to_json
-
-    HTTP::Client.post "#{CLIENT_PORTAL_URI}/instances/#{instance_id}/setup", body: json_blob
+  def self.setup(users_email : String, instance_domain = "https://localhost:3000")
+    # makes post request to placeos client portal to setup instance
+    HTTP::Client.post setup_link, body: setup_json(instance_domain, users_email)
   end
+
+  
 
   # post started up to client portal
 
@@ -65,15 +54,20 @@ module Pulse
 
   # schedule tasks
 
-  # cli ui - does that belong here??
+  private def setup_link : String
+    "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}/setup"  
+  end
 
-  # generate proof of work
-  private def generate_proof_of_work(resource)
-    Hashcash.generate(resource)
+  # make this a SetupBody class method?
+  private def setup_json(instance_domain : String, users_email : String)
+    SetupBody.new(users_email, generate_proof_of_work(users_email), instance_domain).to_json
+  end
+
+  private def generate_proof_of_work(resource) : String
+    Hashcash.generate(resource, bits: 22)
   end
 end
 
-include Pulse
+# include Pulse
 
-Pulse.setup
-# puts generate_proof_of_work("gab@place.technology")
+# Pulse.setup

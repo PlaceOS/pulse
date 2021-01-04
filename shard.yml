@@ -30,3 +30,7 @@ dependencies:
   secrets-env:
     github: place-labs/secrets-env
   
+development_dependencies:
+  webmock:
+    github: manastech/webmock.cr
+    branch: master
