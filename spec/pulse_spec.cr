@@ -4,12 +4,10 @@ include Pulse
 
 describe Pulse do
   it "should generate a setup link from environment variables" do
-    link = generate_setup_link
+    link = setup_link
 
     link.should be_a String
     link.should end_with "/setup"
-
-    # is this useless??
     link.should eq "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}/setup"
   end
 
@@ -37,10 +35,14 @@ describe Pulse do
 
   # test high level setup method
   it "should setup a placeos instance" do
-    # webmock
-    WebMock.stub(:post, "#{App::CLIENT_PORTAL_URI}")
+    WebMock.stub(:post, "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}/setup")
+      # with(body : setup_json)
+      .to_return(status: 201, body: "")
 
-    Pulse.setup("gab@place.technology")
+    setup = Pulse.setup("gab@place.technology")
+    # is this actually testing my code?
+    setup.should be_a HTTP::Client::Response
+    setup.status_code.should eq 201
   end
 
   pending "should setup a placeos instance with a custom domain" do

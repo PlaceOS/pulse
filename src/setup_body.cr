@@ -9,7 +9,7 @@ class SetupBody
   def initialize(
     @instance_primary_contact : String,
     @proof_of_work : String,
-    @instance_domain : String = "https://localhost:3000"
+    @instance_domain : String # might need a default
   )
   end
 end

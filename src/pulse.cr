@@ -8,9 +8,15 @@ require "./constants"
 
 require "./setup_body"
 
+# TODO maybe separate out heartbeat and setup concerns so its not all messy in one module
+
 module Pulse
   def build_json_blob(users_email)
   end
+
+  # post heartbeat to portal
+  # get zones - count the number
+  # schedule tasks
 
   def self.send_heartbeat
     # find instance_id
@@ -44,14 +50,6 @@ module Pulse
     HTTP::Client.post setup_link, body: setup_json(instance_domain, users_email)
   end
 
-  # post started up to client portal
-
-  # post heartbeat to portal
-
-  # get zones - count the number
-
-  # schedule tasks
-
   private def setup_link : String
     "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}/setup"
   end
@@ -65,7 +63,3 @@ module Pulse
     Hashcash.generate(resource, bits: 22)
   end
 end
-
-# include Pulse
-
-# Pulse.setup
