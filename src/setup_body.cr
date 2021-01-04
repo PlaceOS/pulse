@@ -14,5 +14,4 @@ class SetupBody
   end
 end
 
-
 # TODO create a request_body class with is inherited by setupbody and heartbeatbody

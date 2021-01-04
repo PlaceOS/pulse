@@ -44,8 +44,6 @@ module Pulse
     HTTP::Client.post setup_link, body: setup_json(instance_domain, users_email)
   end
 
-  
-
   # post started up to client portal
 
   # post heartbeat to portal
@@ -55,7 +53,7 @@ module Pulse
   # schedule tasks
 
   private def setup_link : String
-    "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}/setup"  
+    "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}/setup"
   end
 
   # make this a SetupBody class method?
