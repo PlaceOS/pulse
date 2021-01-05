@@ -3,14 +3,13 @@ require "json"
 class Pulse::Setup
   include JSON::Serializable
 
-  # should these be getters??
   getter instance_primary_contact : String
   getter instance_domain : String
   getter proof_of_work : String
 
   def initialize(
     @instance_primary_contact : String,
-    @instance_domain : String # might need a default
+    @instance_domain : String = "http://localhost:3000"
   )
     @proof_of_work = Hashcash.generate(@instance_primary_contact, bits: 22)
   end
