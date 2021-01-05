@@ -36,6 +36,8 @@ TODO: Write usage instructions here
 
 TODO: Write development instructions here
 
+`crystal spec` to run tests
+
 ## Contributing
 
 1. Fork it (<https://github.com/your-github-user/pulse/fork>)

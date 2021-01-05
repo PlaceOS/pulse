@@ -2,6 +2,7 @@ require "json"
 
 class Pulse::Heartbeat
   include JSON::Serializable
+  
   getter instance_id : String
   getter drivers_qty : Int32
   getter zones_qty : Int32
