@@ -41,6 +41,18 @@ describe Pulse do
     # finish this spec
   end
 
+  it "should setup a placeos instance with class method" do
+    WebMock.stub(:post, "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}/setup")
+      # with(body : setup_json)
+      .to_return(status: 201, body: "")
+
+    setup = Pulse::Setup.new("gab@place.technology", "https://localhost:3000").send
+    setup.should be_a HTTP::Client::Response
+    setup.status_code.should eq 201
+
+    # finish this spec
+  end
+
   pending "should setup a placeos instance with a custom domain" do
     # webmock
     Pulse.setup("gab@place.technology", "customdomain.custom")
@@ -59,4 +71,10 @@ describe Pulse do
     heartbeat.staff_api.should eq true
     heartbeat.instance_type.should eq "production"
   end
+
+
+
+  # test send heartbeat
+
+
 end

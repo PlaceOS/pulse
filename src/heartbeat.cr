@@ -1,6 +1,6 @@
 require "json"
 
-class Heartbeat
+class Pulse::Heartbeat
   include JSON::Serializable
   property instance_id : String
   property drivers_qty : Int32
@@ -16,5 +16,9 @@ class Heartbeat
     @users_qty = PlaceOS::Model::User.count
     @staff_api = true             # figure out how to find this
     @instance_type = "production" # and this # maybe an envar...
+  end
+
+  def send_heartbeat
+    HTTP::Client.post client_portal_link, body: self.to_json
   end
 end
