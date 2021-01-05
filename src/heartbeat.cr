@@ -18,7 +18,7 @@ class Pulse::Heartbeat
     @instance_type = "production" # and this # maybe an envar...
   end
 
-  def send_heartbeat
+  def send
     HTTP::Client.post client_portal_link, body: self.to_json
   end
 end

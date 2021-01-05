@@ -16,6 +16,6 @@ class Pulse::Setup
   end
 
   def send
-    HTTP::Client.post "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}/setup", body: self.to_json
+    HTTP::Client.post client_portal_link + "/setup", body: self.to_json
   end
 end
