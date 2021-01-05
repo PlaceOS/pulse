@@ -20,9 +20,9 @@ module Pulse
     "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}"
   end
 
-  # ref send method from classes??
-  private def post_to_client_portal(link : String, body)
-    # maybe add key/secret encoding here
-    HTTP::Client.post link, body: body
-  end
+  # # ref send method from classes??
+  # private def post_to_client_portal(link : String, body)
+  #   # maybe add key/secret encoding here
+  #   HTTP::Client.post link, body: body
+  # end
 end

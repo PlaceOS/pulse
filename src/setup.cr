@@ -4,9 +4,9 @@ class Pulse::Setup
   include JSON::Serializable
 
   # should these be getters??
-  property instance_primary_contact : String
-  property instance_domain : String
-  property proof_of_work : String
+  getter instance_primary_contact : String
+  getter instance_domain : String
+  getter proof_of_work : String
 
   def initialize(
     @instance_primary_contact : String,

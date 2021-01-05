@@ -2,12 +2,12 @@ require "json"
 
 class Pulse::Heartbeat
   include JSON::Serializable
-  property instance_id : String
-  property drivers_qty : Int32
-  property zones_qty : Int32
-  property users_qty : Int32
-  property staff_api : Bool
-  property instance_type : String # maybe an enum?
+  getter instance_id : String
+  getter drivers_qty : Int32
+  getter zones_qty : Int32
+  getter users_qty : Int32
+  getter staff_api : Bool
+  getter instance_type : String # maybe an enum?
 
   def initialize
     @instance_id = "#{App::PLACEOS_INSTANCE_ID}"
