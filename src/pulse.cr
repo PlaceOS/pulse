@@ -11,17 +11,19 @@ require "./helpers/heartbeat"
 
 module Pulse
   # TODO schedule tasks
+  # TODO add key exchange
 
-  # high level setup method
-  def setup
+  # TODO document
+  def self.setup(email : String, domain = "http://localhost:3000")
     Pulse::Setup.new(email, domain).send
   end
 
-  #
+  # TODO document
+  def self.heartbeat
+    Pulse::Heartbeat.new.send
+  end
 
-  # high level heartbeat method
-  # Pulse::Heartbeat.new.send
-
+  # should this be private - or live somewhere else?
   def client_portal_link : String
     "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}"
   end

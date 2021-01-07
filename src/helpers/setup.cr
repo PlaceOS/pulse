@@ -9,7 +9,7 @@ class Pulse::Setup
 
   def initialize(
     @instance_primary_contact : String,
-    @instance_domain : String = "http://localhost:3000"
+    @instance_domain = "http://localhost:3000"
   )
     @proof_of_work = Hashcash.generate(@instance_primary_contact, bits: 22)
   end

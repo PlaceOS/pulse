@@ -7,6 +7,5 @@ module App
   PLACEOS_INSTANCE_ID     = ENV["PLACEOS_INSTANCE_ID"]? || abort "No Instance ID set in environment" # change this
   PLACEOS_INSTANCE_SECRET = ENV["PLACEOS_INSTANCE_SECRET"]?
 
-  # secret
   # private key
 end
