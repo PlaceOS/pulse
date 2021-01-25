@@ -19,7 +19,6 @@ describe Pulse::Setup do
     setup_object2.proof_of_work.should contain ":gab@place.technology::"
   end
 
-  # test send - webmock
   it "should setup a placeos instance with class method" do
     WebMock.stub(:post, "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}/setup")
       .to_return(status: 201, body: "")
@@ -28,6 +27,5 @@ describe Pulse::Setup do
     response = setup_object.send
     response.should be_a HTTP::Client::Response
     response.status_code.should eq 201
-    # this isn't good
   end
 end

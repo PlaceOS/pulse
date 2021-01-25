@@ -14,7 +14,7 @@ module Pulse
   # TODO add key exchange
 
   # TODO document
-  def self.setup(email : String, domain = "http://localhost:3000")
+  def self.setup(email : String, domain = App::INSTANCE_DOMAIN)
     Pulse::Setup.new(email, domain).send
   end
 
