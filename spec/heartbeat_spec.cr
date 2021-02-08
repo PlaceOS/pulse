@@ -1,7 +1,7 @@
 require "./spec_helper"
 
 describe Pulse::Heartbeat do
-  it "should create a new heartbeat object" do
+  it ".new" do
     heartbeat = Pulse::Heartbeat.new
 
     heartbeat.instance_type.should eq "production"
@@ -12,13 +12,16 @@ describe Pulse::Heartbeat do
     heartbeat.zones_qty.should be_a Int32
   end
 
-  # test send
-  it "should send a heartbeat class method" do
+  it ".send" do
     WebMock.stub(:post, "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}")
       .to_return(status: 201, body: "")
 
     heartbeat = Pulse::Heartbeat.new.send
     heartbeat.should be_a HTTP::Client::Response
     heartbeat.status_code.should eq 201
+  end
+
+  it ".sign" do
+    # pp! secret_key = Sodium::Sign::SecretKey.new
   end
 end

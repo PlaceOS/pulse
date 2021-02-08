@@ -11,7 +11,6 @@ require "./helpers/heartbeat"
 
 module Pulse
   # TODO schedule tasks
-  # TODO add key exchange
 
   # TODO document
   def self.setup(email : String, domain = App::INSTANCE_DOMAIN)

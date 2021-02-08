@@ -16,9 +16,9 @@ dependencies:
     github: placeos/models
     version: ~> 4
 
-  tasker:
-    github: spider-gazelle/tasker
-    version: ~> 2
+  # tasker:
+  #   github: spider-gazelle/tasker
+  #   version: ~> 2
 
   ulid:
     github: place-labs/ulid
@@ -29,6 +29,9 @@ dependencies:
   
   secrets-env:
     github: place-labs/secrets-env
+
+  sodium:
+    github: didactic-drunk/sodium.cr
   
 development_dependencies:
   webmock:

@@ -24,4 +24,14 @@ class Pulse::Heartbeat
   def send
     HTTP::Client.post client_portal_link, body: self.to_json
   end
+
+  def sign
+  end
+end
+
+class Pulse::SignedHeartBeat
+  {
+    message => Heartbeat,
+    signed  => signature,
+  }
 end
