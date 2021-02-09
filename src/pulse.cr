@@ -21,7 +21,6 @@ module Pulse
   # TODO document
   def self.setup(email : String, domain = App::INSTANCE_DOMAIN)
     Sender.send(Pulse::Message.new(Pulse::Setup.new(email, domain)).payload, "/setup")
-  
   end
 
   # TODO document

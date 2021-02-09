@@ -21,7 +21,6 @@ describe Pulse do
     it "should" do
       setup = Pulse.setup("gab@place.technology")
     end
-  
   end
 
   it ".heartbeat" do
@@ -58,13 +57,13 @@ describe Pulse::Message do
   it "#sign" do
     heartbeat = Pulse::Heartbeat.new
     pp! message = Pulse::Message.new(heartbeat)
-    
+
     message.signature.should be_a String
     message.signature.size.should eq 128
     message.message.should be_a Pulse::Heartbeat
-    
-    #.instance_id.should eq "01EY2J7MQYABT40TVYAK7JPMCK"
-    
+
+    # .instance_id.should eq "01EY2J7MQYABT40TVYAK7JPMCK"
+
     pp! recieved = JSON.parse(message.payload)
 
     SECRET_KEY.public_key.verify_detached(recieved["message"].to_s, recieved["signature"].to_s.hexbytes).should be_nil
