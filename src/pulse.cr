@@ -8,13 +8,9 @@ require "tasker"
 require "./constants"
 require "sodium"
 
-require "./helpers/*"
-
-module Pulse
-  SECRET_KEY = Sodium::Sign::SecretKey.new(App::PLACEOS_INSTANCE_SECRET.hexbytes)
-
+class Pulse
   def initialize
-    Tasker.cron("30 7 * * *") { Pulse.heartbeat }
+    @task = Tasker.cron("30 7 * * *") { Pulse.heartbeat }
     # sends back an object - wil contain methods to stop the task
   end
 
@@ -35,7 +31,7 @@ class Pulse::Message
   getter signature : String
 
   def initialize(@message = Pulse::Heartbeat.new)
-    @signature = (Pulse::SECRET_KEY.sign_detached @message.to_json).hexstring
+    @signature = (App::SECRET_KEY.sign_detached @message.to_json).hexstring
   end
 
   def payload
@@ -50,3 +46,5 @@ module Pulse::Sender
     HTTP::Client.post CLIENT_PORTAL_LINK + custom_uri, body: body
   end
 end
+
+require "./helpers/*"
