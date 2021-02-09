@@ -1,7 +1,9 @@
 require "json"
+require "sodium"
 
 class Pulse::Heartbeat
   include JSON::Serializable
+  include Sodium
 
   getter instance_id : String
   getter drivers_qty : Int32
@@ -21,17 +23,15 @@ class Pulse::Heartbeat
     # add any other telemetry to collect here in future
   end
 
-  def send
-    HTTP::Client.post client_portal_link, body: self.to_json
+  def send : HTTP::Client::Response
+    HTTP::Client.post client_portal_link, body: self.sign.to_json
   end
 
-  def sign
+  def sign : {heartbeat: JSON::Any, signature: String}
+    sig = Sodium::Sign::SecretKey.new(App::SECRET_KEY.hexbytes).sign_detached self.to_json
+    {
+      heartbeat: JSON.parse(self.to_json),
+      signature: sig.hexstring,
+    }
   end
-end
-
-class Pulse::SignedHeartBeat
-  {
-    message => Heartbeat,
-    signed  => signature,
-  }
 end

@@ -4,13 +4,14 @@ version: 0.1.0
 authors:
   - Gab Fitzgerald <gab@place.technology>
 
-crystal: ~> 0.35
+crystal: ~> 0.36
 
 license: MIT
 
 dependencies:
   placeos:
     github: placeos/crystal-client
+    branch: master
   
   placeos-models:
     github: placeos/models
@@ -25,13 +26,13 @@ dependencies:
 
   hashcash:
     github: place-labs/hashcash
-    branch: code-review
   
   secrets-env:
     github: place-labs/secrets-env
 
   sodium:
-    github: didactic-drunk/sodium.cr
+    github: GabFitzgerald/sodium.cr
+    branch: master
   
 development_dependencies:
   webmock:

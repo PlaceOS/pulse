@@ -7,6 +7,5 @@ module App
   PLACEOS_INSTANCE_ID     = ENV["PLACEOS_INSTANCE_ID"]? || abort "No Instance ID set in environment" # change this
   PLACEOS_INSTANCE_SECRET = ENV["PLACEOS_INSTANCE_SECRET"]?
   INSTANCE_DOMAIN         = ENV["INSTANCE_DOMAIN"]? || "http://localhost:3000"
-
-  # private key
+  SECRET_KEY              = ENV["PULSE_SECRET_KEY"] # 64 bytes hexstring
 end
