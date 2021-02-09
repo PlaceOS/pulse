@@ -3,24 +3,24 @@ require "./spec_helper"
 include Pulse
 
 describe Pulse do
-  # test setup method
-  it "should setup a placeos instance" do
+  describe ".setup" do
     WebMock.stub(:post, "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}/setup")
       .to_return(status: 201, body: "")
 
-    setup = Pulse.setup("gab@place.technology")
-    setup.should be_a HTTP::Client::Response
-    setup.status_code.should eq 201
+    it "with default args" do
+      setup = Pulse.setup("gab@place.technology")
+      setup.should be_a HTTP::Client::Response
+      setup.status_code.should eq 201
+    end
 
-    # test setup method with custom somain
-    custom_domain_setup = Pulse.setup("gab@place.technology", "https://localhost:3001")
-    custom_domain_setup.should be_a HTTP::Client::Response
-    custom_domain_setup.status_code.should eq 201
-    # is this just testing that the webmock works?
+    it "with custom domain" do
+      custom_domain_setup = Pulse.setup("gab@place.technology", "https://localhost:3001")
+      custom_domain_setup.should be_a HTTP::Client::Response
+      custom_domain_setup.status_code.should eq 201
+    end
   end
 
-  # test hearbeat method
-  it "should create send a heartbeat to client portal" do
+  it ".heatbeat" do
     WebMock.stub(:post, "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}")
       .to_return(status: 201, body: "")
 
@@ -29,10 +29,22 @@ describe Pulse do
     heartbeat.status_code.should eq 201
   end
 
-  it "should generate a client portal link from environment variables" do
+  it "#client_portal_link" do
     link = client_portal_link
 
     link.should be_a String
     link.should eq "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}"
+  end
+
+  describe "#sign" do
+    it "setup object" do
+      setup_object = Pulse::Setup.new("gab@place.technology")
+      sign(setup_object).should be_a NamedTuple(heartbeat: JSON::Any, signature: String)
+    end
+
+    it "heartbeat object" do
+      heartbeat = Pulse::Heartbeat.new
+      sign(heartbeat).should be_a NamedTuple(heartbeat: JSON::Any, signature: String)
+    end
   end
 end
