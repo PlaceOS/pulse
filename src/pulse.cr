@@ -6,29 +6,48 @@ require "rethinkdb-orm"
 require "http/client"
 require "tasker"
 require "./constants"
+require "sodium"
 
-require "./helpers/setup"
-require "./helpers/heartbeat"
-
-Tasker.cron("30 7 * * *") { Pulse.heartbeat }
+require "./helpers/*"
 
 module Pulse
+  SECRET_KEY = Sodium::Sign::SecretKey.new(App::PLACEOS_INSTANCE_SECRET.hexbytes)
+
+  def initialize
+    Tasker.cron("30 7 * * *") { Pulse.heartbeat }
+    # sends back an object - wil contain methods to stop the task
+  end
+
   # TODO document
   def self.setup(email : String, domain = App::INSTANCE_DOMAIN)
-    HTTP::Client.post client_portal_link + "/setup", body: sign(Pulse::Setup.new(email, domain)).to_json
+    Sender.send(Pulse::Message.new(Pulse::Setup.new(email, domain)).payload, "/setup")
+  
   end
 
   # TODO document
   def self.heartbeat
-    HTTP::Client.post "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}", body: Pulse::Heartbeat.new.sign.to_json
+    Sender.send(Pulse::Message.new.payload)
+  end
+end
+
+class Pulse::Message
+  include JSON::Serializable
+  getter message : Pulse::Heartbeat | Pulse::Setup
+  getter signature : String
+
+  def initialize(@message = Pulse::Heartbeat.new)
+    @signature = (Pulse::SECRET_KEY.sign_detached @message.to_json).hexstring
   end
 
-  def client_portal_link : String
-    "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}"
+  def payload
+    {message: @message.to_json, signature: @signature}.to_json
   end
+end
 
-  def sign(object : Pulse::Setup | Pulse::Heartbeat) : {heartbeat: JSON::Any, signature: String}
-    sig = Sodium::Sign::SecretKey.new(App::SECRET_KEY.hexbytes).sign_detached object.to_json
-    {heartbeat: JSON.parse(object.to_json), signature: sig.hexstring}
+module Pulse::Sender
+  CLIENT_PORTAL_LINK = "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}"
+
+  def self.send(body, custom_uri : String? = "")
+    HTTP::Client.post CLIENT_PORTAL_LINK + custom_uri, body: body
   end
 end
