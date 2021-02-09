@@ -17,9 +17,9 @@ dependencies:
     github: placeos/models
     version: ~> 4
 
-  # tasker:
-  #   github: spider-gazelle/tasker
-  #   version: ~> 2
+  tasker:
+    github: spider-gazelle/tasker
+    version: ~> 2
 
   ulid:
     github: place-labs/ulid

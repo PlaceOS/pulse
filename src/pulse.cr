@@ -4,22 +4,23 @@ require "hashcash"
 require "placeos"
 require "rethinkdb-orm"
 require "http/client"
+require "tasker"
 require "./constants"
 
 require "./helpers/setup"
 require "./helpers/heartbeat"
 
-module Pulse
-  # TODO schedule tasks
+Tasker.cron("30 7 * * *") { Pulse.heartbeat }
 
+module Pulse
   # TODO document
   def self.setup(email : String, domain = App::INSTANCE_DOMAIN)
-    HTTP::Client.post "#{client_portal_link}/setup", body: sign(Pulse::Setup.new(email, domain)).to_json
+    HTTP::Client.post client_portal_link + "/setup", body: sign(Pulse::Setup.new(email, domain)).to_json
   end
 
   # TODO document
   def self.heartbeat
-    HTTP::Client.post client_portal_link, body: sign(Pulse::Heartbeat.new).to_json
+    HTTP::Client.post "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}", body: Pulse::Heartbeat.new.sign.to_json
   end
 
   def client_portal_link : String

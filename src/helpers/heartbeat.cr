@@ -22,4 +22,9 @@ class Pulse::Heartbeat
     @instance_type = "production" # and this # maybe an envar...
     # add any other telemetry to collect here in future
   end
+
+  def sign : {heartbeat: JSON::Any, signature: String}
+    sig = Sodium::Sign::SecretKey.new(App::SECRET_KEY.hexbytes).sign_detached self.to_json
+    {heartbeat: JSON.parse(self.to_json), signature: sig.hexstring}
+  end
 end
