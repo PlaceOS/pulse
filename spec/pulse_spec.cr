@@ -37,33 +37,32 @@ describe Pulse do
   end
 end
 
-# describe Pulse::Message do
-#   it "#sign" do
-#     heartbeat = Pulse::Heartbeat.new
-#     message = Pulse::Message.new(heartbeat)
+describe Message do
+  it ".new" do
+    secret = "b18e1d0045995ec3d010c387ccfeb984d783af8fbb0f40fa7db126d889f6dadd77f48b59caeda77751ed138b0ec667ff50f8768c25d48309a8f386a2bad187fb".hexbytes
+    message = Message.new("01EY4PBEN5F999VQKP55V4C3WD", secret)
+    message.instance_id.should eq "01EY4PBEN5F999VQKP55V4C3WD"
+    message.portal_uri.should eq "http://placeos.run"
+    message.signature.should eq "7c51c1bf33cec94259a53f6a5d72420af6d83be0dc16824cf0739df1c844c6c3554597f8ca8739e018bd31c1ba4652215572fcd7ac33ea6d72c0167bd7ab1b0f"
 
-#     message.signature.should be_a String
-#     message.signature.size.should eq 128
-#     message.message.should be_a Pulse::Heartbeat
+    Sodium::Sign::SecretKey.new(secret).public_key.verify_detached(message.message.to_json, message.signature.hexbytes).should be_nil
+  end
 
-#     # .instance_id.should eq "01EY2J7MQYABT40TVYAK7JPMCK"
+  it ".payload" do
+    secret = "b18e1d0045995ec3d010c387ccfeb984d783af8fbb0f40fa7db126d889f6dadd77f48b59caeda77751ed138b0ec667ff50f8768c25d48309a8f386a2bad187fb".hexbytes
+    message = Message.new("01EY4PBEN5F999VQKP55V4C3WD", secret)
+    message.payload.should eq "{\"instance_id\":\"01EY4PBEN5F999VQKP55V4C3WD\",\"message\":{\"drivers_qty\":0,\"zones_qty\":0,\"users_qty\":0,\"staff_api\":true,\"instance_type\":\"production\"},\"signature\":\"7c51c1bf33cec94259a53f6a5d72420af6d83be0dc16824cf0739df1c844c6c3554597f8ca8739e018bd31c1ba4652215572fcd7ac33ea6d72c0167bd7ab1b0f\"}"
+  end
 
-#     recieved = JSON.parse(message.payload)
+  it ".send" do
+    secret = "b18e1d0045995ec3d010c387ccfeb984d783af8fbb0f40fa7db126d889f6dadd77f48b59caeda77751ed138b0ec667ff50f8768c25d48309a8f386a2bad187fb".hexbytes
+    WebMock.stub(:post, "http://placeos.run/instances/01EY4PBEN5F999VQKP55V4C3WD")
+      .to_return(status: 201, body: "")
 
-#     App::SECRET_KEY.public_key.verify_detached(recieved["message"].to_s, recieved["signature"].to_s.hexbytes).should be_nil
-#   end
-
-#   it ".send" do
-
-# WebMock.stub(:post, "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}")
-#     .to_return(status: 201, body: "")
-#     heartbeat = Pulse::Heartbeat.new
-#     response = Pulse::Sender.send(heartbeat.to_json)
-#     response.should be_a HTTP::Client::Response
-#     response.status_code.should eq 201
-#   end
-# end
-
-# describe Pulse::Sender do
-#
-# end
+    heartbeat = Pulse::Heartbeat.new
+    message = Message.new("01EY4PBEN5F999VQKP55V4C3WD", secret)
+    response = message.send
+    response.should be_a HTTP::Client::Response
+    response.status_code.should eq 201
+  end
+end
