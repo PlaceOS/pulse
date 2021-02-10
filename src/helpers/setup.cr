@@ -10,9 +10,10 @@ class Pulse::Setup
 
   def initialize(
     @instance_primary_contact : String,
+    secret_key,
     @instance_domain = "http://localhost:3000"
   )
     @proof_of_work = Hashcash.generate(@instance_primary_contact, bits: 22)
-    @public_key = App::SECRET_KEY.public_key.to_slice.hexstring
+    @public_key = Sodium::Sign::SecretKey.new(secret_key.hexbytes).public_key.to_slice.hexstring
   end
 end

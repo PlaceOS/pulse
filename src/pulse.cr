@@ -9,41 +9,55 @@ require "./constants"
 require "sodium"
 
 class Pulse
-  def initialize
-    @task = Tasker.cron("30 7 * * *") { Pulse.heartbeat }
+  getter instance_id : String
+  getter secret_key : String
+  getter task : Tasker::CRON(HTTP::Client::Response)
+
+  def initialize(
+    @instance_id : String,
+    @secret_key : String
+  )
+    @task = Tasker.cron("30 7 * * *") { heartbeat }
     # sends back an object - wil contain methods to stop the task
   end
 
   # TODO document
-  def self.setup(email : String, domain = App::INSTANCE_DOMAIN)
-    Sender.send(Pulse::Message.new(Pulse::Setup.new(email, domain)).payload, "/setup")
+  def setup(email : String, domain = "http://localhost:3000")
+    Message.new(@instance_id, @secret_key.hexbytes, Pulse::Setup.new(email, @secret_key, domain)).send("/setup")
   end
 
   # TODO document
-  def self.heartbeat
-    Sender.send(Pulse::Message.new.payload)
+  def heartbeat
+    Message.new(@instance_id, @secret_key.hexbytes).send
   end
 end
 
-class Pulse::Message
+class Message < Pulse
   include JSON::Serializable
   getter message : Pulse::Heartbeat | Pulse::Setup
   getter signature : String
+  getter instance_id
+  getter portal_uri
 
-  def initialize(@message = Pulse::Heartbeat.new)
-    @signature = (App::SECRET_KEY.sign_detached @message.to_json).hexstring
+  def initialize(
+    @instance_id : String,
+    secret_key : Bytes,
+    @message = Pulse::Heartbeat.new,
+    @portal_uri : String = "http://placeos.run"
+  )
+    @signature = (Sodium::Sign::SecretKey.new(secret_key).sign_detached @message.to_json).hexstring
   end
 
   def payload
-    {message: @message.to_json, signature: @signature}.to_json
+    {
+      instance_id: @instance_id,
+      message:     @message,
+      signature:   @signature,
+    }.to_json
   end
-end
 
-module Pulse::Sender
-  CLIENT_PORTAL_LINK = "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}"
-
-  def self.send(body, custom_uri : String? = "")
-    HTTP::Client.post CLIENT_PORTAL_LINK + custom_uri, body: body
+  def send(custom_uri : String? = "") # e.g. /setup
+    HTTP::Client.post "#{@portal_uri}/instances/#{@instance_id}#{custom_uri}", body: self.payload
   end
 end
 

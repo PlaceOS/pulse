@@ -1,11 +1,9 @@
 require "json"
 
-# require "sodium"
-
 class Pulse::Heartbeat
   include JSON::Serializable
 
-  getter instance_id : String
+  # getter instance_id : String
   getter drivers_qty : Int32
   getter zones_qty : Int32
   getter users_qty : Int32
@@ -14,7 +12,7 @@ class Pulse::Heartbeat
   # add any other telemetry to collect here in future
 
   def initialize(
-    @instance_id = "#{App::PLACEOS_INSTANCE_ID}",
+    # @instance_id = "#{App::PLACEOS_INSTANCE_ID}",
     @drivers_qty = PlaceOS::Model::Driver.count,
     @zones_qty = PlaceOS::Model::Zone.count,
     @users_qty = PlaceOS::Model::User.count,
@@ -23,9 +21,4 @@ class Pulse::Heartbeat
   ) # and this # maybe an envar...
     # add any other telemetry to collect here in future
   end
-
-  # def sign : {heartbeat: JSON::Any, signature: String}
-  #   sig = Sodium::Sign::SecretKey.new(App::SECRET_KEY.hexbytes).sign_detached self.to_json
-  #   {heartbeat: JSON.parse(self.to_json), signature: sig.hexstring}
-  # end
 end
