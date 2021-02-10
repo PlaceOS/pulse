@@ -1,7 +1,5 @@
 require "./spec_helper"
 
-# include Pulse
-
 describe Pulse do
   it ".new" do
     pulse = Pulse.new("01EY4PBEN5F999VQKP55V4C3WD", "b18e1d0045995ec3d010c387ccfeb984d783af8fbb0f40fa7db126d889f6dadd77f48b59caeda77751ed138b0ec667ff50f8768c25d48309a8f386a2bad187fb")
@@ -54,16 +52,18 @@ end
 
 #     App::SECRET_KEY.public_key.verify_detached(recieved["message"].to_s, recieved["signature"].to_s.hexbytes).should be_nil
 #   end
-# end
-
-# describe Pulse::Sender do
-#   WebMock.stub(:post, "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}")
-#     .to_return(status: 201, body: "")
 
 #   it ".send" do
+
+# WebMock.stub(:post, "#{App::CLIENT_PORTAL_URI}/instances/#{App::PLACEOS_INSTANCE_ID}")
+#     .to_return(status: 201, body: "")
 #     heartbeat = Pulse::Heartbeat.new
 #     response = Pulse::Sender.send(heartbeat.to_json)
 #     response.should be_a HTTP::Client::Response
 #     response.status_code.should eq 201
 #   end
+# end
+
+# describe Pulse::Sender do
+#
 # end

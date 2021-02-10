@@ -3,7 +3,6 @@ require "json"
 class Pulse::Heartbeat
   include JSON::Serializable
 
-  # getter instance_id : String
   getter drivers_qty : Int32
   getter zones_qty : Int32
   getter users_qty : Int32
@@ -12,7 +11,6 @@ class Pulse::Heartbeat
   # add any other telemetry to collect here in future
 
   def initialize(
-    # @instance_id = "#{App::PLACEOS_INSTANCE_ID}",
     @drivers_qty = PlaceOS::Model::Driver.count,
     @zones_qty = PlaceOS::Model::Zone.count,
     @users_qty = PlaceOS::Model::User.count,

@@ -5,7 +5,6 @@ require "placeos"
 require "rethinkdb-orm"
 require "http/client"
 require "tasker"
-require "./constants"
 require "sodium"
 
 class Pulse
@@ -49,15 +48,11 @@ class Message < Pulse
   end
 
   def payload
-    {
-      instance_id: @instance_id,
-      message:     @message,
-      signature:   @signature,
-    }.to_json
+    {instance_id: @instance_id, message: @message, signature: @signature}.to_json
   end
 
   def send(custom_uri : String? = "") # e.g. /setup
-    HTTP::Client.post "#{@portal_uri}/instances/#{@instance_id}#{custom_uri}", body: self.payload
+    HTTP::Client.post "#{@portal_uri}/instances/#{@instance_id}#{custom_uri}", body: payload.to_json
   end
 end
 
