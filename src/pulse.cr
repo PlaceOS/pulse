@@ -15,9 +15,9 @@ class Pulse
   def initialize(
     @instance_id : String,
     @secret_key : String,
-    heart_rate : Time::Span = 1.day
+    heartbeat_interval : Time::Span = 1.day
   )
-    @task = Tasker.every(heart_rate) { heartbeat }
+    @task = Tasker.every(heartbeat_interval) { heartbeat }
   end
 
   def setup(email : String, domain = "http://localhost:3000")
