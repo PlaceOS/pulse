@@ -14,10 +14,10 @@ class Pulse
 
   def initialize(
     @instance_id : String,
-    @secret_key : String
+    @secret_key : String,
+    heart_rate : Time::Span = 1.day
   )
-    @task = Tasker.cron("30 7 * * *") { heartbeat }
-    # stop the task
+    @task = Tasker.every(heart_rate) { heartbeat }
   end
 
   def setup(email : String, domain = "http://localhost:3000")
@@ -26,6 +26,10 @@ class Pulse
 
   def heartbeat
     Message.new(@instance_id, @secret_key.hexbytes).send
+  end
+
+  def finalize
+    @task.cancel
   end
 end
 
