@@ -8,11 +8,7 @@ crystal: ~> 0.36
 
 license: MIT
 
-dependencies:
-  placeos:
-    github: placeos/crystal-client
-    branch: master
-  
+dependencies: 
   placeos-models:
     github: placeos/models
     version: ~> 4
