@@ -8,20 +8,21 @@ require "tasker"
 require "sodium"
 
 class Pulse
-  getter instance_id : String
-  getter secret_key : String
-  getter task : Tasker::Repeat(HTTP::Client::Response) # not sure about the correct type here.
+  private getter instance_id : String
+  private getter secret_key : Sodium::Sign::SecretKey
+  private getter task : Tasker::Repeat(HTTP::Client::Response)
 
   def initialize(
     @instance_id : String,
-    @secret_key : String,
+    secret_key : String,
     heartbeat_interval : Time::Span = 1.day
   )
+    @secret_key = Sodium::Sign::SecretKey.new(secret_key.hexbytes)
     @task = Tasker.every(heartbeat_interval) { heartbeat }
   end
 
   def heartbeat
-    Message.new(@instance_id, @secret_key.hexbytes).send
+    Message.new(@instance_id, @secret_key).send
   end
 
   def finalize
@@ -38,11 +39,11 @@ class Message < Pulse
 
   def initialize(
     @instance_id : String,
-    secret_key : Bytes,
+    secret_key : Sodium::Sign::SecretKey,
     @message = Pulse::Heartbeat.new,
     @portal_uri : String = "http://placeos.run"
   )
-    @signature = (Sodium::Sign::SecretKey.new(secret_key).sign_detached @message.to_json).hexstring
+    @signature = (secret_key.sign_detached @message.to_json).hexstring
   end
 
   def payload
