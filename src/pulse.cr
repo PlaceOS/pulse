@@ -6,6 +6,7 @@ require "rethinkdb-orm"
 require "http/client"
 require "tasker"
 require "sodium"
+require "uri"
 
 class Pulse
   private getter instance_id : String
@@ -35,13 +36,13 @@ class Message < Pulse
   getter instance_id : String
   getter message : Pulse::Heartbeat # rename to payload
   getter signature : String
-  getter portal_uri : String
+  getter portal_uri : URI
 
   def initialize(
     @instance_id : String,
     secret_key : Sodium::Sign::SecretKey,
     @message = Pulse::Heartbeat.new,
-    @portal_uri : String = "http://placeos.run"
+    @portal_uri : URI = URI.parse "http://placeos.run"
   )
     @signature = (secret_key.sign_detached @message.to_json).hexstring
   end
@@ -50,8 +51,8 @@ class Message < Pulse
     {instance_id: @instance_id, message: @message, signature: @signature}.to_json
   end
 
-  def send(custom_uri : String? = "") # e.g. /setup
-    HTTP::Client.post "#{@portal_uri}/instances/#{@instance_id}#{custom_uri}", body: payload.to_json
+  def send(custom_uri_path : String? = "") # e.g. /setup
+    HTTP::Client.post "#{@portal_uri}/instances/#{@instance_id}#{custom_uri_path}", body: payload.to_json
   end
 end
 
