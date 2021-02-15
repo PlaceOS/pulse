@@ -10,7 +10,7 @@ require "sodium"
 class Pulse
   getter instance_id : String
   getter secret_key : String
-  getter task : Tasker::CRON(HTTP::Client::Response) # not sure about the correct type here.
+  getter task : Tasker::Repeat(HTTP::Client::Response) # not sure about the correct type here.
 
   def initialize(
     @instance_id : String,
@@ -18,10 +18,6 @@ class Pulse
     heartbeat_interval : Time::Span = 1.day
   )
     @task = Tasker.every(heartbeat_interval) { heartbeat }
-  end
-
-  def setup(email : String, domain = "http://localhost:3000")
-    Message.new(@instance_id, @secret_key.hexbytes, Pulse::Setup.new(email, @secret_key, domain)).send("/setup")
   end
 
   def heartbeat
@@ -35,9 +31,9 @@ end
 
 class Message < Pulse
   include JSON::Serializable
-  getter message : Pulse::Heartbeat | Pulse::Setup
-  getter signature : String
   getter instance_id : String
+  getter message : Pulse::Heartbeat # rename to payload
+  getter signature : String
   getter portal_uri : String
 
   def initialize(

@@ -7,25 +7,6 @@ describe Pulse do
     pulse.secret_key.should eq "b18e1d0045995ec3d010c387ccfeb984d783af8fbb0f40fa7db126d889f6dadd77f48b59caeda77751ed138b0ec667ff50f8768c25d48309a8f386a2bad187fb"
   end
 
-  describe ".setup" do
-    WebMock.stub(:post, "http://placeos.run/instances/01EY4PBEN5F999VQKP55V4C3WD/setup")
-      .to_return(status: 201, body: "")
-
-    it "with default args" do
-      pulse = Pulse.new("01EY4PBEN5F999VQKP55V4C3WD", "b18e1d0045995ec3d010c387ccfeb984d783af8fbb0f40fa7db126d889f6dadd77f48b59caeda77751ed138b0ec667ff50f8768c25d48309a8f386a2bad187fb")
-      setup = pulse.setup("gab@place.technology")
-      setup.should be_a HTTP::Client::Response
-      setup.status_code.should eq 201
-    end
-
-    it "with custom domain" do
-      pulse = Pulse.new("01EY4PBEN5F999VQKP55V4C3WD", "b18e1d0045995ec3d010c387ccfeb984d783af8fbb0f40fa7db126d889f6dadd77f48b59caeda77751ed138b0ec667ff50f8768c25d48309a8f386a2bad187fb")
-      custom_domain_setup = pulse.setup("gab@place.technology", "https://localhost:3001")
-      custom_domain_setup.should be_a HTTP::Client::Response
-      custom_domain_setup.status_code.should eq 201
-    end
-  end
-
   it ".heartbeat" do
     WebMock.stub(:post, "http://placeos.run/instances/01EY4PBEN5F999VQKP55V4C3WD")
       .to_return(status: 201, body: "")
