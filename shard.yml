@@ -27,8 +27,7 @@ dependencies:
     github: place-labs/secrets-env
 
   sodium:
-    github: GabFitzgerald/sodium.cr
-    branch: master
+    github: didactic-drunk/sodium.cr
   
 development_dependencies:
   webmock:
