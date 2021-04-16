@@ -1,0 +1,35 @@
+name: pulse
+version: 0.1.0
+
+authors:
+  - Gab Fitzgerald <gab@place.technology>
+
+crystal: ~> 0.36
+
+license: MIT
+
+dependencies: 
+  placeos-models:
+    github: placeos/models
+    version: ~> 4
+
+  tasker:
+    github: spider-gazelle/tasker
+    version: ~> 2
+
+  ulid:
+    github: place-labs/ulid
+
+  hashcash:
+    github: place-labs/hashcash
+  
+  secrets-env:
+    github: place-labs/secrets-env
+
+  sodium:
+    github: didactic-drunk/sodium.cr
+  
+development_dependencies:
+  webmock:
+    github: manastech/webmock.cr
+    branch: master
