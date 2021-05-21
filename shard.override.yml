@@ -4,6 +4,6 @@ dependencies:
 
   # using forked version for compatability with crystal 0.36
   # removed when original repo is updated
-  sodium:
-    github: GabFitzgerald/sodium.cr
-    branch: master
+  # sodium:
+  #   github: GabFitzgerald/sodium.cr
+  #   branch: master
