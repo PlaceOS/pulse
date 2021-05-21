@@ -2,7 +2,7 @@ require "./spec_helper"
 
 describe Pulse do
   it ".new" do
-    pulse = Pulse.new("01EY4PBEN5F999VQKP55V4C3WD", "b18e1d0045995ec3d010c387ccfeb984d783af8fbb0f40fa7db126d889f6dadd77f48b59caeda77751ed138b0ec667ff50f8768c25d48309a8f386a2bad187fb")
+    # pulse = Pulse.new("01EY4PBEN5F999VQKP55V4C3WD", "b18e1d0045995ec3d010c387ccfeb984d783af8fbb0f40fa7db126d889f6dadd77f48b59caeda77751ed138b0ec667ff50f8768c25d48309a8f386a2bad187fb")
     # pulse.instance_id.should eq "01EY4PBEN5F999VQKP55V4C3WD"
     # pulse.secret_key.should eq "b18e1d0045995ec3d010c387ccfeb984d783af8fbb0f40fa7db126d889f6dadd77f48b59caeda77751ed138b0ec667ff50f8768c25d48309a8f386a2bad187fb"
   end
@@ -40,7 +40,7 @@ describe Message do
     WebMock.stub(:post, "http://placeos.run/instances/01EY4PBEN5F999VQKP55V4C3WD")
       .to_return(status: 201, body: "")
 
-    heartbeat = Pulse::Heartbeat.new
+    # heartbeat = Pulse::Heartbeat.new
     message = Message.new("01EY4PBEN5F999VQKP55V4C3WD", secret)
     response = message.send
     response.should be_a HTTP::Client::Response
