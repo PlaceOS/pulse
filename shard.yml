@@ -9,9 +9,9 @@ crystal: ~> 1
 license: MIT
 
 dependencies: 
-  # placeos-models:
-  #   github: placeos/models
-  #   branch: master
+  placeos-models:
+    github: placeos/models
+    branch: master
 
   tasker:
     github: spider-gazelle/tasker
