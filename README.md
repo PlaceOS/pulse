@@ -21,16 +21,24 @@ require "pulse"
 ```
 
 ```crystal
-include Pulse
-Pulse.setup(users_email, instance_domain)
+
+# Create a new Pulse client which registers this instance with the PlaceOS Portal and creates a heartbeat running once a day
+pulse_client = Pulse::Client.new
+pulse_client.registered
+# => true
+
+# If this is a SaaS instance we can pass in `true` as the first param and the instance's private key will be shared with the portal to allow SaaS workflows
+pulse_client = Pulse::Client.new(true)
+pulse_client.saas
+# => true
+
+# If an instance ID and corresponding private key already exist they can be passed in
+instance_id = ULID.generate
+private_key = Sodium::Sign::SecretKey.new.to_slice.hexstring
+pulse_client = Pulse::Client.new(false, instance_id, private_key)
+pulse_client.instance_id == instance_id
+# => true
 ```
-
-explain the setup method here
-
-explain the heartbeat method here
-
-
-TODO: Write usage instructions here
 
 ## Development
 
