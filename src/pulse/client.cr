@@ -6,6 +6,7 @@ module Pulse
   # Pulse::Client will be used to bring together the other aspects of pulse including
   # the Register, Heartbeat and Message classes. It will manage the task of creating heartbeats
   class Client
+    getter saas        : Bool
     getter instance_id : String
     getter private_key : String
     getter registered  : Bool = false
