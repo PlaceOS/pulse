@@ -18,8 +18,8 @@ module Pulse
     PORTAL_API_URI  = ENV["PORTAL_API_URI"]
     SERVICE_USER_ID = ENV["SERVICE_USER_ID"]
 
-    getter instance_id : String = ""
-    getter private_key : String = ""
+    getter instance_id : String
+    getter private_key : String
 
     def initialize(@saas : Bool = false, instance_id=nil, private_key=nil)
       # First, generate our credentials if none are passed in
