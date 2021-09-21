@@ -24,7 +24,7 @@ module Pulse
     end
 
     def heartbeat
-      Message.new(@instance_id, @private_key).send
+      Message.new(@instance_id, @private_key).send("/heartbeat")
     end
 
   end
