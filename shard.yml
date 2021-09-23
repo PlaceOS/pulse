@@ -13,6 +13,10 @@ dependencies:
     github: placeos/models
     branch: master
 
+  placeos:
+    github: placeos/crystal-client
+    version: ~> 2.4.4
+    
   tasker:
     github: spider-gazelle/tasker
     version: ~> 2.0.3

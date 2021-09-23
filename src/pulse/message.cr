@@ -10,7 +10,7 @@ module Pulse
         @instance_id,
         @private_key : String,
         @contents = Pulse::Heartbeat.new,
-        @portal_uri : URI = URI.parse "http://placeos.run"
+        @portal_uri : URI = URI.parse (ENV["PORTAL_URI"] || "http://placeos.run")
     )
         # Private key will be passed in as a string so init an actual key instance
         key = Sodium::Sign::SecretKey.new(@private_key.hexbytes)
@@ -18,7 +18,7 @@ module Pulse
     end
 
     def payload
-        { instance_id: @instance_id, contents: @contents, signature: @signature }.to_json
+        { instance_id: @instance_id,  message: @contents, signature: @signature }.to_json
     end
 
     def send(custom_uri_path : String? = "") # e.g. /setup
