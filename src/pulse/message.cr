@@ -22,7 +22,7 @@ module Pulse
     end
 
     def send(custom_uri_path : String? = "") # e.g. /setup
-        HTTP::Client.post "#{@portal_uri}/instances/#{@instance_id}#{custom_uri_path}", body: payload.to_json
+        HTTP::Client.put "#{@portal_uri}/instances/#{@instance_id}#{custom_uri_path}", body: payload.to_json
     end
   end
 end
