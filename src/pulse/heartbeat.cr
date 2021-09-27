@@ -1,4 +1,5 @@
 require "json"
+
 # require "rest-api"
 
 class Pulse::Heartbeat
@@ -7,6 +8,7 @@ class Pulse::Heartbeat
   getter desks_qty : Int32
   getter carparks_qty : Int32
   getter rooms_qty : Int32
+
   # add any other telemetry to collect here in future
 
   def initialize

@@ -3,11 +3,10 @@ require "ulid"
 require "sodium"
 
 describe Pulse::Client do
-  
   it "creates new credentials and registers (without saas) when initialised without credentials" do
     key = Sodium::CryptoBox::SecretKey.new
     WebMock.stub(:post, "#{PORTAL_API_URI}/register")
-    .to_return(body: { instance_id: "" }.to_json)
+      .to_return(body: {instance_id: ""}.to_json)
     pulse = Pulse::Client.new
     pulse.registered.should eq true
     pulse.instance_id.should_not be_nil
@@ -18,7 +17,7 @@ describe Pulse::Client do
     new_id = ULID.generate
     new_key = Sodium::Sign::SecretKey.new.to_slice.hexstring
     WebMock.stub(:post, "#{PORTAL_API_URI}/register")
-    .to_return(body: { instance_id: new_id }.to_json)
+      .to_return(body: {instance_id: new_id}.to_json)
     pulse = Pulse::Client.new(false, new_id, new_key)
     pulse.registered.should eq true
     pulse.instance_id.should eq new_id
@@ -31,10 +30,10 @@ describe Pulse::Client do
     new_key = Sodium::Sign::SecretKey.new
     # Stub not just register but the portal endpoint for key exchange
     WebMock.stub(:post, "#{PORTAL_API_URI}/register")
-    .to_return(body: { instance_id: new_id, portal_public_key: new_key.public_key.to_slice.hexstring }.to_json)
+      .to_return(body: {instance_id: new_id, portal_public_key: new_key.public_key.to_slice.hexstring}.to_json)
     WebMock.stub(:post, "#{PORTAL_API_URI}/instances/#{new_id}/new_key")
-    .to_return(body: { instance_id: new_id }.to_json)
-    
+      .to_return(body: {instance_id: new_id}.to_json)
+
     # Now we can actually create the registration
     pulse = Pulse::Client.new(true, new_id, new_key.to_slice.hexstring)
     pulse.instance_id.should eq(new_id)
@@ -43,9 +42,9 @@ describe Pulse::Client do
 end
 
 # # We can reenable this once we work out how to stub rethinkdb
-# describe Pulse::Heartbeat do 
+# describe Pulse::Heartbeat do
 #   it "provides counts when initialised" do
-    
+
 #     WebMock.stub(:get, "http://localhost:28015")
 #     .to_return(body: "{}")
 #     heartbeat = Pulse::Heartbeat.new
