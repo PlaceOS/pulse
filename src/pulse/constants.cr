@@ -8,6 +8,8 @@ module Pulse
   PLACE_AUTH_SECRET    = self.required_env("PLACE_AUTH_SECRET")
   PLACE_INSECURE       = ENV["PLACE_INSECURE"]?.presence.try(&.downcase).in?("true", "1")
 
+  JWT_PRIVATE_KEY = self.required_env("JWT_PRIVATE_KEY")
+
   # TODO: Default to production Portal API URI
   PORTAL_API_URI = ENV["PORTAL_API_URI"]?.presence || "https://portal-dev.placeos.run"
 

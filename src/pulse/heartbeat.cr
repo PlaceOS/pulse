@@ -36,12 +36,12 @@ class Pulse::Heartbeat
 
   def self.from_client
     client = PlaceOS::Client.new(
-      base_uri: ENV["PLACE_URI"],
-      email: ENV["PLACE_EMAIL"],
-      password: ENV["PLACE_PASSWORD"],
-      client_id: ENV["PLACE_AUTH_CLIENT_ID"],
-      client_secret: ENV["PLACE_AUTH_SECRET"],
-      insecure: ENV["PLACE_INSECURE"] || true
+      base_uri: PLACE_URI,
+      email: PLACE_EMAIL,
+      password: PLACE_PASSWORD,
+      client_id: PLACE_AUTH_CLIENT_ID,
+      client_secret: PLACE_AUTH_SECRET,
+      insecure: PLACE_INSECURE
     )
 
     count = Hash(Feature, Int32).new(0)

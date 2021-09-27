@@ -66,7 +66,7 @@ module Pulse
     def encrypt_jwt_key(portal_public_key : String) : String
       # This is for encryption so use CryptoBox not Sign
       key = Sodium::CryptoBox::PublicKey.new(portal_public_key.hexbytes)
-      String.new(key.encrypt(ENV["JWT_PRIVATE_KEY"]))
+      String.new(key.encrypt(JWT_PRIVATE_KEY))
     end
 
     def public_key : String
