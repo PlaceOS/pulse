@@ -4,7 +4,6 @@ require "sodium"
 
 describe Pulse::Client do
   it "creates new credentials and registers (without saas) when initialised without credentials" do
-    key = Sodium::CryptoBox::SecretKey.new
     WebMock.stub(:post, "#{PORTAL_API_URI}/register")
       .to_return(body: {instance_id: ""}.to_json)
     pulse = Pulse::Client.new

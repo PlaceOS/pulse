@@ -12,7 +12,7 @@ module Pulse
     getter registered : Bool = false
     getter task : Tasker::Repeat(HTTP::Client::Response)
 
-    def initialize(@saas : Bool = true, instance_id = nil, private_key = nil, heartbeat_interval : Time::Span = 1.day)
+    def initialize(@saas : Bool = false, instance_id = nil, private_key = nil, heartbeat_interval : Time::Span = 1.day)
       # First we need to register the new pulse client in the portal
       # If no ID and private key are passed in then this will be created in the registration class
       registration = Pulse::Register.new(@saas, instance_id, private_key)

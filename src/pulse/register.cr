@@ -5,17 +5,13 @@ require "ulid"
 require "json"
 require "http/client"
 
+require "./constants"
+
 module Pulse
-  #
   # Usage: Pulse::Register.new(saas, instance_id?, private_key?)
   # We may not have an instance ID yet and have to generate one on init
   #
   class Register
-    ENV["PORTAL_API_URI"] ||= "https://portal-dev.placeos.run"
-    ENV["SERVICE_USER_ID"] ||= "user-12345"
-    PORTAL_API_URI  = ENV["PORTAL_API_URI"]
-    SERVICE_USER_ID = ENV["SERVICE_USER_ID"]
-
     getter instance_id : String
     getter private_key : String
 
@@ -40,7 +36,7 @@ module Pulse
         proof_of_work:       Hashcash.generate(@instance_id),
       }
 
-      register_response = HTTP::Client.post "#{PORTAL_API_URI}/register", HTTP::Headers.new, body: payload.to_json
+      register_response = HTTP::Client.post("#{PORTAL_API_URI}/register", body: payload.to_json)
 
       # TODO:: Raise a proper error here
       raise("Register Request Failed") if !register_response.status == (HTTP::Status.new(200) || HTTP::Status.new(201))
@@ -58,7 +54,8 @@ module Pulse
           # TODO:: Throw some error
         end
       else
-        portal_response = NamedTuple(instance_id: String).from_json(register_response.body)
+        # FIXME: this is unused?
+        _portal_response = NamedTuple(instance_id: String).from_json(register_response.body)
       end
 
       # If we get to here without erroring return true
