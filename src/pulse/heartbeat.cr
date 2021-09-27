@@ -1,17 +1,40 @@
 require "json"
-
-# require "rest-api"
+require "placeos-models/zone"
+require "placeos-models/metadata"
 
 class Pulse::Heartbeat
   include JSON::Serializable
 
-  getter desks_qty : Int32
-  getter carparks_qty : Int32
-  getter rooms_qty : Int32
+  enum Feature
+    Desks
+    Carparks
+    Rooms
+  end
 
-  # add any other telemetry to collect here in future
+  getter counts : Hash(Feature, Int32)
 
-  def initialize
+  def self.from_database
+    feature_count = Models::Metadata.all.each_with_object(Hash(Feature, Int32).new(0)) do |metadata, count|
+      # Select for Zone metadata
+      next unless metadata.parent_id.starts_with? Zone.table_name
+      # Select for valid feature name
+      next unless feature = Feature.parse? metadata.name
+
+      if (details = metadata.details.as_a?).nil?
+        Log.warn { {
+          message: "expected an array, got #{metadata.details}",
+          zone_id: metadata.parent_id,
+          feature: feature.to_s,
+        } }
+      else
+        count[feature] += details.size
+      end
+    end
+
+    Heartbeat.new(feature_count)
+  end
+
+  def self.from_client
     client = PlaceOS::Client.new(
       base_uri: ENV["PLACE_URI"],
       email: ENV["PLACE_EMAIL"],
@@ -20,21 +43,31 @@ class Pulse::Heartbeat
       client_secret: ENV["PLACE_AUTH_SECRET"],
       insecure: ENV["PLACE_INSECURE"] || true
     )
-    @desks_qty = count_features(client, "desks")
-    @carparks_qty = count_features(client, "desks")
-    @rooms_qty = client.systems.search.size
+
+    count = Hash(Feature, Int32).new(0)
+
+    # Fetch _ALL_ Zones
+    client.zones.search.each do |zone|
+      # Extract metadata for desired feature
+      client.metadata.fetch(zone.id).each do |metadata_name, details|
+        # Select for valid feature name
+        next unless feature = Feature.parse?(metadata_name)
+
+        if (feature_array = details.as_a?).nil?
+          Log.warn { {
+            message: "expected an array, got #{details}",
+            zone_id: zone.id,
+            feature: feature.to_s,
+          } }
+        else
+          count[feature] += feature_array.size
+        end
+      end
+    end
+
+    Heartbeat.new(count)
   end
 
-  def count_features(client : PlaceOS::Client, metadata_name : String) : Int32
-    # First get all the zones
-    zones = client.zones.search
-    # Now store all the desk objects in any of these zones
-    features = [] of JSON::Any
-    zones.each do |z|
-      feature_metadata = client.metadata.fetch(z.id, metadata_name)
-      features += feature_metadata[metadata_name].details.as_a unless feature_metadata.empty? || !feature_metadata[metadata_name]
-    end
-    # Finally, pass back the total count of desks
-    features.size
+  def initialize(@counts : Hash(Feature, Int32))
   end
 end
