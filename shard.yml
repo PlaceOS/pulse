@@ -12,10 +12,6 @@ dependencies:
     github: placeos/models
     version: ~> 5.11
 
-  placeos:
-    github: placeos/crystal-client
-    version: ~> 2.4
-
   promise:
     github: spider-gazelle/promise
     version: ~> 3.0

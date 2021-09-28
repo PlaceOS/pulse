@@ -39,3 +39,6 @@ jobs:
         run: shards install
       - name: Run tests
         run: crystal spec --error-trace -v
+        env:
+          PORTAL_API_URI: "https://portal-dev.placeos.run"
+          JWT_PRIVATE_KEY: "<TEST KEY>"

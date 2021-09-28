@@ -1,13 +1,6 @@
 module Pulse
   PLACE_PORTAL_URI = ENV["PLACE_PORTAL_URI"]?.presence || "https://placeos.run"
 
-  PLACE_URI            = self.required_env("PLACE_URI")
-  PLACE_EMAIL          = self.required_env("PLACE_EMAIL")
-  PLACE_PASSWORD       = self.required_env("PLACE_PASSWORD")
-  PLACE_AUTH_CLIENT_ID = self.required_env("PLACE_AUTH_CLIENT_ID")
-  PLACE_AUTH_SECRET    = self.required_env("PLACE_AUTH_SECRET")
-  PLACE_INSECURE       = self.boolean_env("PLACE_INSECURE")
-
   JWT_PRIVATE_KEY = self.required_env("JWT_PRIVATE_KEY")
 
   PULSE_SAAS        = self.boolean_env("PLACE_PULSE_SAAS")
