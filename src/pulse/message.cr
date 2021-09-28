@@ -3,7 +3,7 @@ require "json"
 require "./constants"
 require "./heartbeat"
 
-module Pulse
+module PlaceOS::Pulse
   class Message
     include JSON::Serializable
 
@@ -11,7 +11,7 @@ module Pulse
 
     # TODO: Caspian: not breaking the interface for now, but doesn't make sense to do this rename...
     @[JSON::Field(key: "message")]
-    getter contents : Pulse::Heartbeat
+    getter contents : PlaceOS::Pulse::Heartbeat
 
     getter signature : String
 
@@ -21,7 +21,7 @@ module Pulse
     def initialize(
       @instance_id : String,
       private_key : String,
-      @contents : Pulse::Heartbeat = Heartbeat.from_database,
+      @contents : PlaceOS::Pulse::Heartbeat = Heartbeat.from_database,
       @place_portal_uri : URI = URI.parse(PLACE_PORTAL_URI)
     )
       # Gab: Private key will be passed in as a string, so init an actual key instance

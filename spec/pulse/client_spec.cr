@@ -1,11 +1,11 @@
 require "../spec_helper"
 
-module Pulse
+module PlaceOS::Pulse
   describe Client do
     it "creates new credentials and registers (without saas) when initialised without credentials" do
       WebMock.stub(:post, "#{PLACE_PORTAL_URI}/register")
         .to_return(body: {instance_id: ""}.to_json)
-      pulse = Pulse::Client.new
+      pulse = PlaceOS::Pulse::Client.new
       pulse.registered.should eq true
       pulse.instance_id.should_not be_nil
       pulse.private_key.should_not be_nil
@@ -16,7 +16,7 @@ module Pulse
       new_key = Sodium::Sign::SecretKey.new.to_slice.hexstring
       WebMock.stub(:post, "#{PLACE_PORTAL_URI}/register")
         .to_return(body: {instance_id: new_id}.to_json)
-      pulse = Pulse::Client.new(false, new_id, new_key)
+      pulse = PlaceOS::Pulse::Client.new(false, new_id, new_key)
       pulse.registered.should eq true
       pulse.instance_id.should eq new_id
       pulse.private_key.should eq new_key
@@ -33,7 +33,7 @@ module Pulse
         .to_return(body: {instance_id: new_id}.to_json)
 
       # Now we can actually create the registration
-      pulse = Pulse::Client.new(true, new_id, new_key.to_slice.hexstring)
+      pulse = PlaceOS::Pulse::Client.new(true, new_id, new_key.to_slice.hexstring)
       pulse.instance_id.should eq(new_id)
       pulse.private_key.should eq(new_key.to_slice.hexstring)
     end
@@ -42,7 +42,7 @@ module Pulse
       WebMock.stub(:post, "http://placeos.run/instances/01EY4PBEN5F999VQKP55V4C3WD")
         .to_return(status: 201, body: "")
 
-      pulse = Pulse.new("01EY4PBEN5F999VQKP55V4C3WD", "b18e1d0045995ec3d010c387ccfeb984d783af8fbb0f40fa7db126d889f6dadd77f48b59caeda77751ed138b0ec667ff50f8768c25d48309a8f386a2bad187fb")
+      pulse = PlaceOS::Pulse.new("01EY4PBEN5F999VQKP55V4C3WD", "b18e1d0045995ec3d010c387ccfeb984d783af8fbb0f40fa7db126d889f6dadd77f48b59caeda77751ed138b0ec667ff50f8768c25d48309a8f386a2bad187fb")
       heartbeat = pulse.heartbeat
       heartbeat.should be_a HTTP::Client::Response
       heartbeat.status_code.should eq 201

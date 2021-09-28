@@ -1,6 +1,6 @@
 require "tasker"
 
-module Pulse
+module PlaceOS::Pulse
   # Handles registration and periodic telemtry reporting
   #
   class Client
@@ -20,7 +20,7 @@ module Pulse
       # Gab: If no ID and private key are passed in then this will be created in the registration class
 
       # FIXME: Register should be a message just like any other and sent via this client
-      registration = Pulse::Register.new(@saas, instance_id, private_key)
+      registration = PlaceOS::Pulse::Register.new(@saas, instance_id, private_key)
 
       # Gab: Make the call to actually register this instance
       @registered = registration.portal_request

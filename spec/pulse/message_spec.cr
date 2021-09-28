@@ -3,7 +3,7 @@ require "../spec_helper"
 require "ulid"
 require "sodium"
 
-module Pulse
+module PlaceOS::Pulse
   describe Message do
     pending ".new" do
       secret = Sodium::Sign::SecretKey.new("b18e1d0045995ec3d010c387ccfeb984d783af8fbb0f40fa7db126d889f6dadd77f48b59caeda77751ed138b0ec667ff50f8768c25d48309a8f386a2bad187fb".hexbytes)
@@ -26,8 +26,8 @@ module Pulse
       WebMock.stub(:post, "http://placeos.run/instances/01EY4PBEN5F999VQKP55V4C3WD")
         .to_return(status: 201, body: "")
 
-      # heartbeat = Pulse::Heartbeat.new
-      Pulse::Heartbeat.new
+      # heartbeat = PlaceOS::Pulse::Heartbeat.new
+      PlaceOS::Pulse::Heartbeat.new
       message = Message.new("01EY4PBEN5F999VQKP55V4C3WD", secret)
       response = message.send
       response.should be_a HTTP::Client::Response

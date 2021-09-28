@@ -3,7 +3,7 @@ require "placeos-models/metadata"
 require "placeos-models/zone"
 require "promise"
 
-struct Pulse::Heartbeat
+struct PlaceOS::Pulse::Heartbeat
   include JSON::Serializable
 
   enum Feature

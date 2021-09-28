@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module Pulse
+module PlaceOS::Pulse
   # We can reenable this once we work out how to stub rethinkdb
   describe Heartbeat do
     pending "#module_instances" do

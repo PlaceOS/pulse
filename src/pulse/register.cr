@@ -8,8 +8,8 @@ require "ulid"
 
 require "./constants"
 
-module Pulse
-  # Usage: Pulse::Register.new(saas, instance_id?, private_key?)
+module PlaceOS::Pulse
+  # Usage: PlaceOS::Pulse::Register.new(saas, instance_id?, private_key?)
   # We may not have an instance ID yet and have to generate one on init
   #
   class Register

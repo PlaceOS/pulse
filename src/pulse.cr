@@ -1,6 +1,6 @@
 require "./pulse/*"
 
-module Pulse
+module PlaceOS::Pulse
   def self.from_environment : Client
     Client.new(
       saas: PULSE_SAAS,

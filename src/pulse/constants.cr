@@ -1,4 +1,4 @@
-module Pulse
+module PlaceOS::Pulse
   PLACE_PORTAL_URI = ENV["PLACE_PORTAL_URI"]?.presence || "https://placeos.run"
 
   JWT_PRIVATE_KEY = self.required_env("JWT_PRIVATE_KEY")
