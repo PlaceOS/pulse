@@ -1,18 +1,8 @@
-# pulse
+# PlaceOS Pulse
 
-PlaceOS heartbeat manager
+[![CI](https://github.com/PlaceOS/pulse/actions/workflows/crystal.yml/badge.svg)](https://github.com/PlaceOS/pulse/actions/workflows/crystal.yml)
 
-## Installation
-
-1. Add the dependency to your `shard.yml`:
-
-   ```yaml
-   dependencies:
-     pulse:
-       github: placeos/pulse
-   ```
-
-2. Run `shards install`
+The [PlaceOS](https://placeoos.com) telemetry client.
 
 ## Usage
 
@@ -50,20 +40,8 @@ pulse_client = Pulse::Client.new(heartbeat_interval: 1.hour)
 
 Initialising the client will create an automated task which PUTs to `<PLACE_PORTAL_URI>/instances/<INSTANCE_ID>/heartbeat` with the frequency defined by the `heartbeat_interval` param which defaults to one per day.
 
-## Development
-
-TODO: Write development instructions here
-
-`crystal spec` to run tests
-
-## Contributing
-
-1. Fork it (<https://github.com/your-github-user/pulse/fork>)
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
-
 ## Contributors
 
-- [Gab Fitzgerald](https://github.com/GabFitzgerald) - creator and maintainer
+- [Gab Fitzgerald](https://github.com/GabFitzgerald) - creator
+- [Caspian Baska](https://github.com/caspiano) - maintainer
+- [Cameron Reeves](https://github.com/camreeves) - maintainer
