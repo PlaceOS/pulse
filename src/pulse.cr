@@ -1,4 +1,4 @@
 module Pulse
 end
 
-require "./pulse/**"
+require "./pulse/*"

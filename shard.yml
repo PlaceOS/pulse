@@ -1,9 +1,10 @@
 name: pulse
 version: 0.3.0
-crystal: ">= 1.0.0"
+crystal: ">= 1.1.1"
 license: MIT
 authors:
   - Caspian Baska <caspian@place.technology>
+  - Cameron Reeves <cam@place.technology>
   - Gab Fitzgerald <gab@place.technology>
 
 dependencies:
@@ -14,6 +15,10 @@ dependencies:
   placeos:
     github: placeos/crystal-client
     version: ~> 2.4
+
+  promise:
+    github: spider-gazelle/promise
+    version: ~> 3.0
 
   tasker:
     github: spider-gazelle/tasker

@@ -1,9 +1,10 @@
-require "log"
 require "hashcash"
+require "http/client"
+require "json"
+require "log"
+require "placeos-models"
 require "sodium"
 require "ulid"
-require "json"
-require "http/client"
 
 require "./constants"
 
@@ -15,7 +16,11 @@ module Pulse
     getter instance_id : String
     getter private_key : String
 
-    def initialize(@saas : Bool = false, instance_id = nil, private_key = nil)
+    def initialize(
+      @saas : Bool = false,
+      instance_id = nil,
+      private_key = nil
+    )
       # First, generate our credentials if none are passed in
       @instance_id, @private_key = instance_id.nil? ? generate_creds : {instance_id, private_key}
     end
@@ -41,7 +46,7 @@ module Pulse
       # TODO:: Raise a proper error here
       raise("Register Request Failed") if !register_response.status == (HTTP::Status.new(200) || HTTP::Status.new(201))
 
-      # If this is a saas instance then we need to encrypt the JWT_PRIVATE_KEY and send it back, otherwise we're good
+      # SaaS instances JWT_PRIVATE_KEY is encrypted and sent to PortalAPI
       if @saas
         portal_response = NamedTuple(instance_id: String, portal_public_key: String).from_json(register_response.body)
         payload = {
