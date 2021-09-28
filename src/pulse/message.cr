@@ -16,13 +16,13 @@ module Pulse
     getter signature : String
 
     @[JSON::Field(ignore: true)]
-    getter portal_uri : URI
+    getter place_portal_uri : URI
 
     def initialize(
       @instance_id : String,
       private_key : String,
       @contents : Pulse::Heartbeat = Heartbeat.from_database,
-      @portal_uri : URI = PORTAL_URI
+      @place_portal_uri : URI = URI.parse(PLACE_PORTAL_URI)
     )
       # Gab: Private key will be passed in as a string, so init an actual key instance
       key = Sodium::Sign::SecretKey.new(private_key.hexbytes)
@@ -31,7 +31,7 @@ module Pulse
 
     # FIXME: IO should be handled by the client itself, not the data.
     def send(custom_uri_path : String? = "") # e.g. /setup
-      HTTP::Client.put("#{@portal_uri}/instances/#{@instance_id}#{custom_uri_path}", body: to_json)
+      HTTP::Client.put("#{@place_portal_uri}/instances/#{@instance_id}#{custom_uri_path}", body: to_json)
     end
   end
 end

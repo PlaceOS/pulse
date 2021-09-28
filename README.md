@@ -22,7 +22,7 @@ require "pulse"
 
 ```crystal
 # The instance needs to the URI of the portal to register with
-export PORTAL_URI=https://portal-dev.placeos.run
+export PLACE_PORTAL_URI=https://portal-dev.placeos.run
 ```
 
 ```crystal
@@ -48,7 +48,7 @@ pulse_client.instance_id == instance_id
 pulse_client = Pulse::Client.new(heartbeat_interval: 1.hour)
 ```
 
-Initialising the client will create an automated task which PUTs to `<PORTAL_URI>/instances/<INSTANCE_ID>/heartbeat` with the frequency defined by the `heartbeat_interval` param which defaults to one per day.
+Initialising the client will create an automated task which PUTs to `<PLACE_PORTAL_URI>/instances/<INSTANCE_ID>/heartbeat` with the frequency defined by the `heartbeat_interval` param which defaults to one per day.
 
 ## Development
 

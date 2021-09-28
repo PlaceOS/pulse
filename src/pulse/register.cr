@@ -41,7 +41,7 @@ module Pulse
         proof_of_work:       Hashcash.generate(@instance_id),
       }
 
-      register_response = HTTP::Client.post("#{PORTAL_API_URI}/register", body: payload.to_json)
+      register_response = HTTP::Client.post("#{PLACE_PORTAL_URI}/register", body: payload.to_json)
 
       # TODO:: Raise a proper error here
       raise("Register Request Failed") if !register_response.status == (HTTP::Status.new(200) || HTTP::Status.new(201))
@@ -53,7 +53,7 @@ module Pulse
           user_id:     SERVICE_USER_ID,
           private_key: encrypt_jwt_key(portal_response[:portal_public_key]),
         }
-        key_response = HTTP::Client.post "#{PORTAL_API_URI}/instances/#{@instance_id}/new_key", HTTP::Headers.new, body: payload.to_json
+        key_response = HTTP::Client.post "#{PLACE_PORTAL_URI}/instances/#{@instance_id}/new_key", HTTP::Headers.new, body: payload.to_json
 
         if !key_response.status == (HTTP::Status.new(200) || HTTP::Status.new(201))
           # TODO:: Throw some error
