@@ -7,6 +7,7 @@ require "ulid"
 require "responsible"
 
 require "./constants"
+require "./error"
 
 module PlaceOS::Pulse
   include Responsible
@@ -86,8 +87,7 @@ module PlaceOS::Pulse
       protected def {{ verb.id }}(path : String, request : Message::Request)
         HTTP::Client.{{verb.id}}(File.join(api_base, path), body: message(request).to_json).tap do |response|
           unless response.status.ok? || response.status.created?
-            # TODO: Create error class
-            raise("Register Request Failed with #{response.status_code}:\n#{response.body}")
+            raise Error.new(request, response)
           end
         end
       end
