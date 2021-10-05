@@ -1,5 +1,4 @@
-require "placeos-models/metadata"
-require "placeos-models/zone"
+require "placeos-models"
 require "promise"
 
 require "./request"

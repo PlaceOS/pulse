@@ -1,8 +1,7 @@
 require "json"
-require "sodium/sign/public_key"
+require "sodium"
 
-require "../constants"
-
+require "./constants"
 require "./message/request"
 
 module PlaceOS::Pulse

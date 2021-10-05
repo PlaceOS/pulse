@@ -1,5 +1,3 @@
-require "json"
-
 require "./request"
 
 module PlaceOS::Pulse

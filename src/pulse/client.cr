@@ -31,6 +31,7 @@ module PlaceOS::Pulse
       @instance_id : String = ULID.generate,
       @saas : Bool = false,
       portal_uri : String = PLACE_PORTAL_URI,
+      @private_key : String = JWT_PRIVATE_KEY,
       @heartbeat_interval : Time::Span = 6.hours
     )
       @api_base = File.join(portal_uri, ROUTE_BASE)
@@ -83,7 +84,7 @@ module PlaceOS::Pulse
 
     {% for verb in ["post", "put"] %}
       protected def {{ verb.id }}(path : String, request : Message::Request)
-        HTTP::Client.{{verb.id}}(File.join(api_base, path), body: message(request).to_json)).tap do |response|
+        HTTP::Client.{{verb.id}}(File.join(api_base, path), body: message(request).to_json).tap do |response|
           unless response.status.ok? || response.status.created?
             # TODO: Create error class
             raise("Register Request Failed with #{response.status_code}:\n#{response.body}")

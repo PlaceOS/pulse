@@ -1,7 +1,7 @@
 require "../spec_helper"
 
 module PlaceOS::Pulse
-  describe Client do
+  pending Client do
     it "creates new credentials and registers (without saas) when initialised without credentials" do
       WebMock.stub(:post, "#{PLACE_PORTAL_URI}/register")
         .to_return(body: {instance_id: ""}.to_json)
