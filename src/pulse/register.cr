@@ -1,25 +1,26 @@
-require "log"
 require "hashcash"
+require "http/client"
+require "json"
+require "log"
+require "placeos-models"
 require "sodium"
 require "ulid"
-require "json"
-require "http/client"
 
-module Pulse
-  #
-  # Usage: Pulse::Register.new(saas, instance_id?, private_key?)
+require "./constants"
+
+module PlaceOS::Pulse
+  # Usage: PlaceOS::Pulse::Register.new(saas, instance_id?, private_key?)
   # We may not have an instance ID yet and have to generate one on init
   #
   class Register
-    ENV["PORTAL_API_URI"] ||= "https://portal-dev.placeos.run"
-    ENV["SERVICE_USER_ID"] ||= "user-12345"
-    PORTAL_API_URI  = ENV["PORTAL_API_URI"]
-    SERVICE_USER_ID = ENV["SERVICE_USER_ID"]
-
     getter instance_id : String
     getter private_key : String
 
-    def initialize(@saas : Bool = false, instance_id = nil, private_key = nil)
+    def initialize(
+      @saas : Bool = false,
+      instance_id = nil,
+      private_key = nil
+    )
       # First, generate our credentials if none are passed in
       @instance_id, @private_key = instance_id.nil? ? generate_creds : {instance_id, private_key}
     end
@@ -40,25 +41,26 @@ module Pulse
         proof_of_work:       Hashcash.generate(@instance_id),
       }
 
-      register_response = HTTP::Client.post "#{PORTAL_API_URI}/register", HTTP::Headers.new, body: payload.to_json
+      register_response = HTTP::Client.post("#{PLACE_PORTAL_URI}/register", body: payload.to_json)
 
       # TODO:: Raise a proper error here
       raise("Register Request Failed") if !register_response.status == (HTTP::Status.new(200) || HTTP::Status.new(201))
 
-      # If this is a saas instance then we need to encrypt the JWT_PRIVATE_KEY and send it back, otherwise we're good
+      # SaaS instances JWT_PRIVATE_KEY is encrypted and sent to PortalAPI
       if @saas
         portal_response = NamedTuple(instance_id: String, portal_public_key: String).from_json(register_response.body)
         payload = {
           user_id:     SERVICE_USER_ID,
           private_key: encrypt_jwt_key(portal_response[:portal_public_key]),
         }
-        key_response = HTTP::Client.post "#{PORTAL_API_URI}/instances/#{@instance_id}/new_key", HTTP::Headers.new, body: payload.to_json
+        key_response = HTTP::Client.post "#{PLACE_PORTAL_URI}/instances/#{@instance_id}/new_key", HTTP::Headers.new, body: payload.to_json
 
         if !key_response.status == (HTTP::Status.new(200) || HTTP::Status.new(201))
           # TODO:: Throw some error
         end
       else
-        portal_response = NamedTuple(instance_id: String).from_json(register_response.body)
+        # FIXME: this is unused?
+        _portal_response = NamedTuple(instance_id: String).from_json(register_response.body)
       end
 
       # If we get to here without erroring return true
@@ -69,7 +71,7 @@ module Pulse
     def encrypt_jwt_key(portal_public_key : String) : String
       # This is for encryption so use CryptoBox not Sign
       key = Sodium::CryptoBox::PublicKey.new(portal_public_key.hexbytes)
-      String.new(key.encrypt(ENV["JWT_PRIVATE_KEY"]))
+      String.new(key.encrypt(JWT_PRIVATE_KEY))
     end
 
     def public_key : String

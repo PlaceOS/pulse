@@ -1,40 +1,69 @@
 require "json"
+require "placeos-models/metadata"
+require "placeos-models/zone"
+require "promise"
 
-# require "rest-api"
-
-class Pulse::Heartbeat
+struct PlaceOS::Pulse::Heartbeat
   include JSON::Serializable
 
-  getter desks_qty : Int32
-  getter carparks_qty : Int32
-  getter rooms_qty : Int32
+  enum Feature
+    Desks
+    Carparks
+    Rooms
 
-  # add any other telemetry to collect here in future
-
-  def initialize
-    client = PlaceOS::Client.new(
-      base_uri: ENV["PLACE_URI"],
-      email: ENV["PLACE_EMAIL"],
-      password: ENV["PLACE_PASSWORD"],
-      client_id: ENV["PLACE_AUTH_CLIENT_ID"],
-      client_secret: ENV["PLACE_AUTH_SECRET"],
-      insecure: ENV["PLACE_INSECURE"] || true
-    )
-    @desks_qty = count_features(client, "desks")
-    @carparks_qty = count_features(client, "desks")
-    @rooms_qty = client.systems.search.size
+    def to_json_object_key
+      to_json
+    end
   end
 
-  def count_features(client : PlaceOS::Client, metadata_name : String) : Int32
-    # First get all the zones
-    zones = client.zones.search
-    # Now store all the desk objects in any of these zones
-    features = [] of JSON::Any
-    zones.each do |z|
-      feature_metadata = client.metadata.fetch(z.id, metadata_name)
-      features += feature_metadata[metadata_name].details.as_a unless feature_metadata.empty? || !feature_metadata[metadata_name]
+  getter feature_count : Hash(Feature, Int32)
+
+  record ModuleCount, count : Int32, running : Int32 do
+    include JSON::Serializable
+  end
+
+  getter module_instances : Hash(String, ModuleCount)
+
+  def self.feature_count
+    PlaceOS::Model::Metadata.all.each_with_object(Hash(Feature, Int32).new(0)) do |metadata, count|
+      # Select for Zone metadata
+      next unless metadata.parent_id.try(&.starts_with? PlaceOS::Model::Zone.table_name)
+      # Select for valid feature name
+      next unless feature = Feature.parse? metadata.name
+
+      if (details = metadata.details.as_a?).nil?
+        Log.warn { {
+          message: "expected an array, got #{metadata.details}",
+          zone_id: metadata.parent_id,
+          feature: feature.to_s,
+        } }
+      else
+        count[feature] += details.size
+      end
     end
-    # Finally, pass back the total count of desks
-    features.size
+  end
+
+  def self.module_instances
+    PlaceOS::Model::Module
+      .all
+      .each_with_object(Hash(String, Tuple(Int32, Int32)).new { |h, k| h[k] = {0, 0} }) do |mod, tally|
+        count, running = tally[mod.name]
+        count += 1
+        running += 1 if mod.running
+        tally[mod.name] = {count, running}
+      end.transform_values { |count, running| ModuleCount.new(count, running) }
+  end
+
+  def self.from_database
+    # telemetry = Promise.all(
+    #   count = Promise.defer { feature_count },
+    #   modules = Promise.defer { module_instances },
+    # ).get
+    #
+    # Heartbeat.new(*telemetry)
+    Heartbeat.new(feature_count, module_instances)
+  end
+
+  def initialize(@feature_count : Hash(Feature, Int32), @module_instances : Hash(String, ModuleCount))
   end
 end

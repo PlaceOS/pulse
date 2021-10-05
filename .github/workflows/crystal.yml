@@ -1,27 +1,44 @@
-name: Crystal CI
+name: CI
 
-on: [ push ]
+on: [push]
 
 jobs:
-  build:
-    strategy: 
+  style:
+    runs-on: ubuntu-latest
+    container: crystallang/crystal:latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+      - name: Format
+        run: crystal tool format --check
+      - name: Lint
+        uses: crystal-ameba/github-action@v0.2.12
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  test:
+    name: "stable: ${{ matrix.stable }}, crystal: ${{ matrix.crystal }}"
+    runs-on: ubuntu-latest
+    strategy:
       fail-fast: false
       matrix:
-        crystal: [latest, nightly, 1.0.0, 0.36.0]
-    runs-on: ubuntu-latest
-
+        stable: [true]
+        crystal:
+          - 1.1.1
+        include:
+          - crystal: nightly
+            stable: false
+    continue-on-error: ${{ !matrix.stable }}
     steps:
-    - uses: oprypin/install-crystal@v1
-      with:
-        crystal: ${{matrix.crystal}}
-    - uses: actions/checkout@v2
-    - name: Crystal Ameba Linter
-      uses: crystal-ameba/github-action@v0.2.12
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Install dependencies
-      run: shards install
-    - name: Run tests
-      run: crystal spec
-    - run: crystal tool format && git diff --exit-code
-      if: matrix.crystal == 'latest'
+      - uses: crystal-lang/install-crystal@v1.5.1
+        with:
+          crystal: ${{ matrix.crystal }}
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: shards install
+      - name: Run tests
+        run: crystal spec --error-trace -v
+        env:
+          PORTAL_API_URI: "https://portal-dev.placeos.run"
+          JWT_PRIVATE_KEY: "<TEST KEY>"

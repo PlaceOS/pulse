@@ -1,28 +1,37 @@
-module Pulse
+require "json"
+
+require "./constants"
+require "./heartbeat"
+
+module PlaceOS::Pulse
   class Message
     include JSON::Serializable
+
     getter instance_id : String
-    getter contents : Pulse::Heartbeat # revise type, make generic
+
+    # TODO: Caspian: not breaking the interface for now, but doesn't make sense to do this rename...
+    @[JSON::Field(key: "message")]
+    getter contents : PlaceOS::Pulse::Heartbeat
+
     getter signature : String
-    getter portal_uri : URI
+
+    @[JSON::Field(ignore: true)]
+    getter place_portal_uri : URI
 
     def initialize(
-      @instance_id,
-      @private_key : String,
-      @contents = Pulse::Heartbeat.new,
-      @portal_uri : URI = URI.parse (ENV["PORTAL_URI"] || "http://placeos.run")
+      @instance_id : String,
+      private_key : String,
+      @contents : PlaceOS::Pulse::Heartbeat = Heartbeat.from_database,
+      @place_portal_uri : URI = URI.parse(PLACE_PORTAL_URI)
     )
-      # Private key will be passed in as a string so init an actual key instance
-      key = Sodium::Sign::SecretKey.new(@private_key.hexbytes)
+      # Gab: Private key will be passed in as a string, so init an actual key instance
+      key = Sodium::Sign::SecretKey.new(private_key.hexbytes)
       @signature = (key.sign_detached @contents.to_json).hexstring
     end
 
-    def payload
-      {instance_id: @instance_id, message: @contents, signature: @signature}.to_json
-    end
-
+    # FIXME: IO should be handled by the client itself, not the data.
     def send(custom_uri_path : String? = "") # e.g. /setup
-      HTTP::Client.put "#{@portal_uri}/instances/#{@instance_id}#{custom_uri_path}", body: payload.to_json
+      HTTP::Client.put("#{@place_portal_uri}/instances/#{@instance_id}#{custom_uri_path}", body: to_json)
     end
   end
 end
