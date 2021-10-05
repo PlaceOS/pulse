@@ -1,37 +1,34 @@
 require "json"
+require "sodium/sign/public_key"
 
-require "./constants"
-require "./heartbeat"
+require "../constants"
+
+require "./message/request"
 
 module PlaceOS::Pulse
-  class Message
+  struct Message
     include JSON::Serializable
 
+    getter saas : Bool
     getter instance_id : String
-
-    # TODO: Caspian: not breaking the interface for now, but doesn't make sense to do this rename...
-    @[JSON::Field(key: "message")]
-    getter contents : PlaceOS::Pulse::Heartbeat
-
     getter signature : String
+    getter message : Request
 
-    @[JSON::Field(ignore: true)]
-    getter place_portal_uri : URI
+    def self.sign(value : Request, key : String)
+      value.to_json
+      signer = Sodium::Sign::SecretKey.new(key.hexbytes)
+      (signer.sign_detached value.to_json).hexstring
+    end
 
     def initialize(
       @instance_id : String,
-      private_key : String,
-      @contents : PlaceOS::Pulse::Heartbeat = Heartbeat.from_database,
-      @place_portal_uri : URI = URI.parse(PLACE_PORTAL_URI)
+      @saas : Bool,
+      @message : T,
+      @key : String = Consants::JWT_PRIVATE_KEY
     )
-      # Gab: Private key will be passed in as a string, so init an actual key instance
-      key = Sodium::Sign::SecretKey.new(private_key.hexbytes)
-      @signature = (key.sign_detached @contents.to_json).hexstring
-    end
-
-    # FIXME: IO should be handled by the client itself, not the data.
-    def send(custom_uri_path : String? = "") # e.g. /setup
-      HTTP::Client.put("#{@place_portal_uri}/instances/#{@instance_id}#{custom_uri_path}", body: to_json)
+      @signature = Message.sign(@message, key)
     end
   end
 end
+
+require "./message/*"
