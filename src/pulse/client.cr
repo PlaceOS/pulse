@@ -68,13 +68,6 @@ module PlaceOS::Pulse
       end
     end
 
-    # Encrypt this instance's JWT_PRIVATE_KEY using the passed in public key
-    def encrypt_jwt_key(portal_public_key : String) : String
-      # This is for encryption so use CryptoBox not Sign
-      key = Sodium::CryptoBox::PublicKey.new(portal_public_key.hexbytes)
-      String.new(key.encrypt(JWT_PRIVATE_KEY))
-    end
-
     def public_key : String
       Sodium::Sign::SecretKey.new(@private_key.hexbytes).public_key.to_slice.hexstring
     end
