@@ -18,8 +18,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   test:
-    name: "stable: ${{ matrix.stable }}, crystal: ${{ matrix.crystal }}"
     runs-on: ubuntu-latest
+    name: "crystal: ${{ matrix.crystal }}, stable: ${{ matrix.stable }}"
+    continue-on-error: ${{ !matrix.stable }}
+    services:
+      rethink:
+        image: rethinkdb:2.4
+        ports:
+        - 29015:29015
+        - 28015:28015
     strategy:
       fail-fast: false
       matrix:
@@ -29,7 +36,6 @@ jobs:
         include:
           - crystal: nightly
             stable: false
-    continue-on-error: ${{ !matrix.stable }}
     steps:
       - uses: crystal-lang/install-crystal@v1.5.1
         with:
@@ -39,6 +45,3 @@ jobs:
         run: shards install
       - name: Run tests
         run: crystal spec --error-trace -v
-        env:
-          PORTAL_API_URI: "https://portal-dev.placeos.run"
-          JWT_PRIVATE_KEY: "<TEST KEY>"

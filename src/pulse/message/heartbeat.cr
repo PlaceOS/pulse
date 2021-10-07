@@ -4,7 +4,7 @@ require "promise"
 require "./request"
 
 module PlaceOS::Pulse
-  struct Heartbeat < Request
+  struct Message::Heartbeat < Request
     enum Feature
       Desks
       Carparks

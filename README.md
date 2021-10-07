@@ -7,15 +7,8 @@ The [PlaceOS](https://placeoos.com) telemetry client.
 ## Usage
 
 ```crystal
-require "pulse"
-```
 
-```crystal
-# The instance needs to the URI of the portal to register with
-export PLACE_PORTAL_URI=https://portal-dev.placeos.run
-```
-
-```crystal
+require "placeos-pulse"
 
 # Create a new Pulse client which registers this instance with the PlaceOS Portal and creates a heartbeat running once a day
 pulse_client = PlaceOS::Pulse::Client.new
@@ -39,6 +32,9 @@ pulse_client = PlaceOS::Pulse::Client.new(heartbeat_interval: 1.hour)
 ```
 
 Initialising the client will create an automated task which PUTs to `<PLACE_PORTAL_URI>/instances/<INSTANCE_ID>/heartbeat` with the frequency defined by the `heartbeat_interval` param which defaults to one per day.
+
+### Configuration
+
 
 ## Contributors
 

@@ -8,6 +8,7 @@ require "responsible"
 
 require "./constants"
 require "./error"
+require "./message/response"
 
 module PlaceOS::Pulse
   include Responsible
@@ -16,8 +17,9 @@ module PlaceOS::Pulse
   #
   class Client
     getter? saas : Bool
+    getter email : String
     getter instance_id : String
-    getter private_key : String
+    getter instance_token : String
     getter registered : Bool = false
 
     private getter heartbeat_task : Tasker::Repeat(HTTP::Client::Response)?
@@ -29,10 +31,10 @@ module PlaceOS::Pulse
 
     def initialize(
       @instance_token : String,
+      @email : String,
       @instance_id : String = ULID.generate,
       @saas : Bool = false,
       portal_uri : String = PLACE_PORTAL_URI,
-      @private_key : String = JWT_PRIVATE_KEY,
       @heartbeat_interval : Time::Span = 6.hours
     )
       @api_base = File.join(portal_uri, ROUTE_BASE)
@@ -48,7 +50,7 @@ module PlaceOS::Pulse
     end
 
     protected def heartbeat
-      put("/#{instance_id}/heartbeat", Hearbeat.from_database)
+      put("/instances/#{instance_id}/heartbeat", Message::Heartbeat.from_database)
     end
 
     # Register the instance.
@@ -57,19 +59,16 @@ module PlaceOS::Pulse
     #
     # The API token enables external control of the intance.
     protected def register : Nil
-      post("/register", Register.generate(
-        token: instance_token,
-        public_key: public_key,
+      post("/register", Message::Register.generate(
+        email: email,
         instance_id: instance_id,
       ))
 
       if saas?
-        post("/instances/#{instance_id}/new_key", Message::Token.new(instance_token))
+        post("/instances/#{instance_id}/token", Message::Token.new(instance_token))
       end
-    end
 
-    def public_key : String
-      Sodium::Sign::SecretKey.new(@private_key.hexbytes).public_key.to_slice.hexstring
+      @registered = true
     end
 
     protected def message(request : Request)
@@ -77,7 +76,7 @@ module PlaceOS::Pulse
     end
 
     {% for verb in ["post", "put"] %}
-      protected def {{ verb.id }}(path : String, request : Message::Request)
+      protected def {{ verb.id }}(path : String, request : Request)
         HTTP::Client.{{verb.id}}(File.join(api_base, path), body: message(request).to_json).tap do |response|
           unless response.status.ok? || response.status.created?
             raise Error.new(request, response)

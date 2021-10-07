@@ -1,6 +1,6 @@
 require "./base"
 
 module PlaceOS::Pulse
-  abstract struct Request < Base
+  abstract struct Response < Base
   end
 end
