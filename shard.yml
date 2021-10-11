@@ -1,5 +1,5 @@
 name: placeos-pulse
-version: 0.4.1
+version: 0.4.2
 crystal: ">= 1.1.1"
 license: MIT
 authors:
@@ -14,7 +14,6 @@ dependencies:
 
   promise:
     github: spider-gazelle/promise
-    version: ~> 3.0
 
   responsible:
     github: place-labs/responsible
