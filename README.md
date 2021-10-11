@@ -7,34 +7,23 @@ The [PlaceOS](https://placeoos.com) telemetry client.
 ## Usage
 
 ```crystal
-
 require "placeos-pulse"
 
-# Create a new Pulse client which registers this instance with the PlaceOS Portal and creates a heartbeat running once a day
+# Create a new Pulse client
 pulse_client = PlaceOS::Pulse::Client.new
-pulse_client.registered
-# => true
 
-# If this is not a SaaS instance we can pass in `false` as the first param and the instance's private key won't be shared with the portal
-pulse_client = PlaceOS::Pulse::Client.new(false)
-pulse_client.saas
-# => false
-
-# If an instance ID and corresponding private key already exist they can be passed in
-instance_id = ULID.generate
-private_key = Sodium::Sign::SecretKey.new.to_slice.hexstring
-pulse_client = PlaceOS::Pulse::Client.new(false, instance_id, private_key)
-pulse_client.instance_id == instance_id
-# => true
-
-# The frequency which an instance sends heartbeats can be defined with the heartbeat_interval param
-pulse_client = PlaceOS::Pulse::Client.new(heartbeat_interval: 1.hour)
+# Registers the instance with the PlaceOS Portal.
+# The client periodically reports platform telemetry.
+pulse_client.start
 ```
-
-Initialising the client will create an automated task which PUTs to `<PLACE_PORTAL_URI>/instances/<INSTANCE_ID>/heartbeat` with the frequency defined by the `heartbeat_interval` param which defaults to one per day.
 
 ### Configuration
 
+```
+PULSE_SAAS           # Whether the instance is a SaaS instance or not, accepts `1, 0, true, false`
+PULSE_INSTANCE_EMAIL # Email to register the admin of the instance against
+PULSE_INSTANCE_ID    # Unique identifier for the instance
+```
 
 ## Contributors
 
