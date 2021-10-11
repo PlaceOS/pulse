@@ -18,7 +18,7 @@ module PlaceOS::Pulse
 
   class_getter modules : Array(PlaceOS::Model::Module) do
     module_instances.flat_map do |name, total|
-      driver = Model::Generator.driver(module_name: name).save!
+      driver = Model::Generator.driver(module_name: name, role: :device).save!
       mods = Array.new(total.count) do
         mod = Model::Generator.module(driver: driver)
         mod.running = false
