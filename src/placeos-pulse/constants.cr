@@ -3,11 +3,11 @@ module PlaceOS::Pulse
   PULSE_SAAS       = self.boolean_env("PLACE_PULSE_SAAS")
 
   class_getter instance_email : String do
-    required_env("PULSE_INSTANCE_EMAIL")
+    required_env("PLACE_PULSE_INSTANCE_EMAIL")
   end
 
   class_getter instance_id : String do
-    required_env("PULSE_INSTANCE_ID")
+    required_env("PLACE_PULSE_INSTANCE_ID")
   end
 
   class_getter? saas : Bool do

@@ -20,9 +20,9 @@ pulse_client.start
 ### Configuration
 
 ```
-PULSE_SAAS           # Whether the instance is a SaaS instance or not, accepts `1, 0, true, false`
-PULSE_INSTANCE_EMAIL # Email to register the admin of the instance against
-PULSE_INSTANCE_ID    # Unique identifier for the instance
+PLACE_PULSE_SAAS           # Whether the instance is a SaaS instance or not, accepts `1, 0, true, false`
+PlACE_PULSE_INSTANCE_EMAIL # Email to register the admin of the instance against
+PlACE_PULSE_INSTANCE_ID    # Unique identifier for the instance
 ```
 
 ## Contributors
