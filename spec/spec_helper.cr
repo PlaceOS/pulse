@@ -1,6 +1,6 @@
 require "spec"
 require "webmock"
 
-require "../src/pulse"
+require "../src/placeos-pulse"
 
 Spec.before_each &->WebMock.reset

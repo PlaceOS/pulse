@@ -1,4 +1,4 @@
-require "./pulse/*"
+require "./placeos-pulse/*"
 
 module PlaceOS::Pulse
   def self.from_environment : Client
