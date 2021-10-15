@@ -1,11 +1,11 @@
 require "../spec_helper"
-ROUTE_BASE = "/api/portal/v1/"
+ROUTE_BASE          = "/api/portal/v1/"
 MOCK_INSTANCE_ID    = "mock-id"
 MOCK_INSTANCE_EMAIL = "test@place.tech"
+
 module PlaceOS::Pulse
   describe Message do
     it "should contain a signature which can be verified with the public key" do
-
       backend = ::Log::IOBackend.new(STDOUT)
       ::Log.setup { |c| c.bind("*", :info, backend) }
       # Generate the data that would usually be passed in
