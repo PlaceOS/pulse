@@ -3,6 +3,7 @@ require "http/client"
 require "json"
 require "tasker"
 require "ulid"
+require "sodium"
 
 require "responsible"
 
@@ -32,12 +33,14 @@ module PlaceOS::Pulse
     def initialize(
       @instance_token : String,
       @email : String,
+      private_key : String,
       @instance_id : String = ULID.generate,
       @saas : Bool = false,
       portal_uri : String = PLACE_PORTAL_URI,
       @heartbeat_interval : Time::Span = 6.hours
     )
       @api_base = File.join(portal_uri, ROUTE_BASE)
+      @private_key_obj = Sodium::Sign::SecretKey.new(private_key.hexbytes)
     end
 
     def start
@@ -72,7 +75,7 @@ module PlaceOS::Pulse
     end
 
     protected def message(request : Request)
-      Message.new(instance_id, saas?, request)
+      Message.new(instance_id, saas?, request, @private_key_obj)
     end
 
     {% for verb in ["post", "put"] %}
