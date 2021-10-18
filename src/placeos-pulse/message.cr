@@ -23,7 +23,7 @@ module PlaceOS::Pulse
     end
 
     def self.verify_signature(public_key : String, message : String, signature : String)
-      Sodium::Sign::PublicKey.new(public_key.hexbytes).verify_detached message, signature.hexbytes
+      Sodium::Sign::PublicKey.new(public_key.hexbytes).verify_detached(message, signature.hexbytes)
     end
   end
 end
