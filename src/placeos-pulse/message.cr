@@ -19,7 +19,7 @@ module PlaceOS::Pulse
       @message : Request,
       private_key : Sodium::Sign::SecretKey
     )
-      @signature = (private_key.sign_detached @message.to_json).hexstring
+      @signature = private_key.sign_detached(@message.to_json).hexstring
     end
 
     def self.verify_signature(public_key : String, message : String, signature : String)
