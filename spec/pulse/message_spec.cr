@@ -24,8 +24,10 @@ module PlaceOS::Pulse
       message.signature.should eq (private_key_obj.sign_detached register_message.to_json).hexstring
     end
 
-    it "has a class method that verifies the message signature" do
-      PlaceOS::Pulse::Message.verify_signature(private_key_obj.public_key.to_slice.hexstring, register_message.to_json, message.signature).should eq nil
+    describe ".verify_signature" do
+      it "verifies the message signature" do
+        PlaceOS::Pulse::Message.verify_signature(private_key_obj.public_key.to_slice.hexstring, register_message.to_json, message.signature).should be_nil
+      end
     end
   end
 end
