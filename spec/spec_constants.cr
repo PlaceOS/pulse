@@ -7,7 +7,7 @@ module PlaceOS::Pulse
   ROUTE_BASE          = "/api/portal/v1/"
 
   class_getter private_key : Sodium::Sign::SecretKey do
-    Sodium::Sign::SecretKey.new
+    Sodium::Sign::SecretKey.new(MOCK_PRIVATE_KEY.bytes)
   end
 
   class_getter register_message : PlaceOS::Pulse::Message::Register do
