@@ -20,8 +20,10 @@ module PlaceOS::Pulse
   end
 
   describe Message do
-    it "should contain a signature which can be verified with the public key" do
-      message.signature.should eq (private_key_obj.sign_detached register_message.to_json).hexstring
+    describe "#signature" do
+      it "returns a signature of the message's contents" do
+        message.signature.should eq private_key_obj.sign_detached(register_message.to_json).hexstring
+      end
     end
 
     describe ".verify_signature" do
