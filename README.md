@@ -1,6 +1,6 @@
 # PlaceOS Pulse
 
-[![CI](https://github.com/PlaceOS/pulse/actions/workflows/crystal.yml/badge.svg)](https://github.com/PlaceOS/pulse/actions/workflows/crystal.yml)
+[![CI](https://github.com/PlaceOS/pulse/actions/workflows/ci.yml/badge.svg)](https://github.com/PlaceOS/pulse/actions/workflows/ci.yml)
 
 The [PlaceOS](https://placeoos.com) telemetry client.
 

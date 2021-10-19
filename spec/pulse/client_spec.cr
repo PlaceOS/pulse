@@ -1,15 +1,11 @@
 require "../spec_helper"
 
 module PlaceOS::Pulse
-  MOCK_INSTANCE_ID    = "mock-id"
-  MOCK_INSTANCE_TOKEN = "mock-token"
-  MOCK_INSTANCE_EMAIL = "test@place.tech"
-  API_BASE            = "#{PLACE_PORTAL_URI}/api/portal/v1"
-
   def self.client(saas = false)
     Client.new(
       instance_id: MOCK_INSTANCE_ID,
       instance_token: MOCK_INSTANCE_TOKEN,
+      private_key: private_key,
       email: MOCK_INSTANCE_EMAIL,
       saas: saas,
     )
