@@ -5,7 +5,7 @@ module PlaceOS::Pulse
     Client.new(
       instance_id: MOCK_INSTANCE_ID,
       instance_token: MOCK_INSTANCE_TOKEN,
-      private_key: MOCK_PRIVATE_KEY,
+      private_key: private_key,
       email: MOCK_INSTANCE_EMAIL,
       saas: saas,
     )
