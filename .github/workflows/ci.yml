@@ -1,25 +1,15 @@
 name: CI
 
-on: [push]
+on:
+  push:
 
 jobs:
   style:
-    runs-on: ubuntu-latest
-    container: crystallang/crystal:latest
-    strategy:
-      fail-fast: false
-    steps:
-      - uses: actions/checkout@v2
-      - name: Format
-        run: crystal tool format --check
-      - name: Lint
-        uses: crystal-ameba/github-action@v0.2.12
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    uses: PlaceOS/.github/.github/workflows/crystal-style.yml@main
 
   test:
     runs-on: ubuntu-latest
-    name: "crystal: ${{ matrix.crystal }}, stable: ${{ matrix.stable }}"
+    name: "${{ !matrix.stable && '🚧 ' || ''}}crystal: ${{ matrix.crystal }}"
     continue-on-error: ${{ !matrix.stable }}
     services:
       rethink:
@@ -33,6 +23,7 @@ jobs:
         stable: [true]
         crystal:
           - 1.1.1
+          - 1.2.0
         include:
           - crystal: nightly
             stable: false
@@ -44,4 +35,4 @@ jobs:
       - name: Install dependencies
         run: shards install
       - name: Run tests
-        run: crystal spec --error-trace -v
+        run: crystal spec --error-trace --verbose --order random
