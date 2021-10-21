@@ -8,7 +8,7 @@ module PlaceOS::Pulse
 
     # Generate the register request, performing proof-of-work
     #
-    def self.generate(email, instance_id)
+    def self.generate(email, instance_id, public_key)
       new(
         email,
         Hashcash.generate(instance_id),

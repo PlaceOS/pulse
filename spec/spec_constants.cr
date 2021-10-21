@@ -13,7 +13,8 @@ module PlaceOS::Pulse
   class_getter register_message : PlaceOS::Pulse::Message::Register do
     Message::Register.generate(
       email: MOCK_INSTANCE_EMAIL,
-      instance_id: MOCK_INSTANCE_ID
+      instance_id: MOCK_INSTANCE_ID,
+      public_key: private_key.public_key.to_slice.hexstring
     )
   end
 
