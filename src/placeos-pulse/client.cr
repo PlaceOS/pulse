@@ -64,6 +64,7 @@ module PlaceOS::Pulse
       post("/register", Message::Register.generate(
         email: email,
         instance_id: instance_id,
+        public_key: @private_key.public_key.to_slice.hexstring
       ))
 
       if saas?
