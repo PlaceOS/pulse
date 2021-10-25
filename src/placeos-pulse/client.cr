@@ -20,7 +20,7 @@ module PlaceOS::Pulse
     getter? saas : Bool
     getter email : String
     getter instance_id : String
-    getter instance_token : String
+    getter instance_token : String?
     getter registered : Bool = false
 
     private getter heartbeat_task : Tasker::Repeat(HTTP::Client::Response)?
@@ -31,7 +31,7 @@ module PlaceOS::Pulse
     ROUTE_BASE = "/api/portal/v1/"
 
     def initialize(
-      @instance_token : String,
+      @instance_token : String?,
       @email : String,
       @private_key : Sodium::Sign::SecretKey,
       @instance_id : String = ULID.generate,
@@ -68,7 +68,10 @@ module PlaceOS::Pulse
       ))
 
       if saas?
-        post("/instances/#{instance_id}/token", Message::Token.new(instance_token))
+        if (token = instance_token).nil?
+          raise Error.new("Missing instance token for saas instance.")
+        end
+        post("/instances/#{instance_id}/token", Message::Token.new(token))
       end
 
       @registered = true

@@ -1,5 +1,5 @@
 name: placeos-pulse
-version: 0.8.0
+version: 0.9.0
 crystal: ">= 1.1.1"
 license: MIT
 authors:
@@ -25,7 +25,8 @@ dependencies:
     github: spider-gazelle/secrets-env
 
   sodium:
-    github: didactic-drunk/sodium.cr
+    github: place-labs/sodium.cr
+    branch: fix/aead-chalsa-signature
 
   tasker:
     github: spider-gazelle/tasker
