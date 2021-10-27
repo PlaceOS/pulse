@@ -2,6 +2,10 @@ module PlaceOS::Pulse
   PLACE_PORTAL_URI = ENV["PLACE_PORTAL_URI"]?.presence || "https://placeos.run"
   PULSE_SAAS       = self.boolean_env("PLACE_PULSE_SAAS")
 
+  class_getter instance_telemetry_key : String do
+    required_env("PLACE_INSTANCE_TELEMETRY_KEY")
+  end
+
   class_getter instance_email : String do
     required_env("PLACE_PULSE_INSTANCE_EMAIL")
   end

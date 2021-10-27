@@ -26,6 +26,8 @@ module PlaceOS::Pulse
     private getter heartbeat_task : Tasker::Repeat(HTTP::Client::Response)?
     private getter heartbeat_interval : Time::Span
 
+    private getter private_key : Sodium::Sign::SecretKey
+
     getter api_base : String
 
     ROUTE_BASE = "/api/portal/v1/"
@@ -33,12 +35,17 @@ module PlaceOS::Pulse
     def initialize(
       @instance_token : String?,
       @email : String,
-      @private_key : Sodium::Sign::SecretKey,
+      private_key : String | Sodium::Sign::SecretKey,
       @instance_id : String = ULID.generate,
       @saas : Bool = false,
       portal_uri : String = PLACE_PORTAL_URI,
       @heartbeat_interval : Time::Span = 6.hours
     )
+      @private_key = case private_key
+                     in Sodium::Sign::SecretKey then private_key
+                     in String                  then Sodium::Sign::SecretKey.new(private_key.hexbytes)
+                     end
+
       @api_base = File.join(portal_uri, ROUTE_BASE)
     end
 
