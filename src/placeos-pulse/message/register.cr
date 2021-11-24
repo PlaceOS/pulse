@@ -6,6 +6,8 @@ module PlaceOS::Pulse
   struct Message::Register < Request
     getter email : String
 
+    getter instance_id : String
+
     getter proof_of_work : String
 
     getter public_key : String
@@ -15,6 +17,7 @@ module PlaceOS::Pulse
     def self.generate(email, instance_id, public_key)
       new(
         email,
+        instance_id,
         Hashcash.generate(instance_id),
         public_key
       )
