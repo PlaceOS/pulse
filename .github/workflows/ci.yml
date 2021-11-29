@@ -22,10 +22,8 @@ jobs:
       matrix:
         stable: [true]
         crystal:
-          - 1.1.1
+          - 1.2.2
         include:
-          - crystal: 1.2.1
-            stable: false
           - crystal: nightly
             stable: false
     steps:

@@ -10,7 +10,7 @@ module PlaceOS::Pulse
     Sodium::Sign::SecretKey.new(MOCK_PRIVATE_KEY.hexbytes)
   end
 
-  class_getter register_message : PlaceOS::Pulse::Message::Register do
+  class_getter register_message : Message::Register do
     Message::Register.generate(
       email: MOCK_INSTANCE_EMAIL,
       instance_id: MOCK_INSTANCE_ID,
@@ -18,7 +18,7 @@ module PlaceOS::Pulse
     )
   end
 
-  class_getter message : PlaceOS::Pulse::Message do
+  class_getter message : Message(Message::Register) do
     Message.new(MOCK_INSTANCE_ID, true, register_message, private_key)
   end
 
