@@ -21,7 +21,7 @@ module PlaceOS::Pulse
     end
 
     def valid?(instance_id : String)
-      Hashcash.validate!(proof_of_work, instance_id)
+      Hashcash.valid!(proof_of_work, instance_id)
       true
     rescue error : Hashcash::Error
       Log.warn(exception: error) { "invalid proof of work" }
