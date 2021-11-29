@@ -2,21 +2,20 @@ require "json"
 require "sodium"
 
 require "./constants"
-require "./message/request"
 
 module PlaceOS::Pulse
-  struct Message
+  struct Message(T)
     include JSON::Serializable
 
     getter saas : Bool
     getter instance_id : String
-    getter message : Request
+    getter message : T
     getter signature : String
 
     def initialize(
       @instance_id : String,
       @saas : Bool,
-      @message : Request,
+      @message : T,
       private_key : Sodium::Sign::SecretKey
     )
       @signature = private_key.sign_detached(@message.to_json).hexstring
