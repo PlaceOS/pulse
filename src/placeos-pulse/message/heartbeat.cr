@@ -21,6 +21,10 @@ module PlaceOS::Pulse
       def to_json_object_key
         to_json
       end
+
+      def self.from_json_object_key?(key)
+        self.parse(key)
+      end
     end
 
     getter feature_count : Hash(Feature, Int32)
