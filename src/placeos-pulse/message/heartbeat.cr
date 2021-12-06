@@ -19,7 +19,7 @@ module PlaceOS::Pulse
       end
 
       def to_json_object_key
-        to_json
+        to_s.downcase
       end
 
       def self.from_json_object_key?(key)
