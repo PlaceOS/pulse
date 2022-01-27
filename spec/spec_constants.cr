@@ -18,7 +18,7 @@ module PlaceOS::Pulse
     )
   end
 
-  class_getter message : Message(Message::Register) do
+  class_getter message : Message do
     Message.new(MOCK_INSTANCE_ID, true, register_message, private_key)
   end
 

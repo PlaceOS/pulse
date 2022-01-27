@@ -4,18 +4,18 @@ require "sodium"
 require "./constants"
 
 module PlaceOS::Pulse
-  struct Message(T)
+  struct Message
     include JSON::Serializable
 
     getter saas : Bool
     getter instance_id : String
-    getter message : T
+    getter message : Request | Response
     getter signature : String
 
     def initialize(
       @instance_id : String,
       @saas : Bool,
-      @message : T,
+      @message : Request | Response,
       private_key : Sodium::Sign::SecretKey
     )
       @signature = private_key.sign_detached(@message.to_json).hexstring
