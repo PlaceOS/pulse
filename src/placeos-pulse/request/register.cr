@@ -1,9 +1,9 @@
 require "hashcash"
 
-require "./request"
+require "../request"
 
 module PlaceOS::Pulse
-  struct Message::Register < Request
+  struct Register < Request
     getter email : String
 
     getter proof_of_work : String

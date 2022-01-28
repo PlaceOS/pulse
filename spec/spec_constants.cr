@@ -10,16 +10,16 @@ module PlaceOS::Pulse
     Sodium::Sign::SecretKey.new(MOCK_PRIVATE_KEY.hexbytes)
   end
 
-  class_getter register_message : Message::Register do
-    Message::Register.generate(
+  class_getter register_message : Register do
+    Register.generate(
       email: MOCK_INSTANCE_EMAIL,
       instance_id: MOCK_INSTANCE_ID,
       public_key: private_key.public_key.to_slice.hexstring
     )
   end
 
-  class_getter message : Message(Message::Register) do
-    Message.new(MOCK_INSTANCE_ID, true, register_message, private_key)
+  class_getter message : RegisterRequest do
+    RegisterRequest.new(MOCK_INSTANCE_ID, true, register_message, private_key)
   end
 
   class_getter control_systems : Array(PlaceOS::Model::ControlSystem) do
@@ -51,13 +51,13 @@ module PlaceOS::Pulse
     end
   end
 
-  class_getter module_instances : Hash(String, Message::Heartbeat::ModuleCount) do
+  class_getter module_instances : Hash(String, Heartbeat::ModuleCount) do
     # Mock diverse module data
     {
       "Special" => {2, 1},
       "Printer" => {1, 0},
       "TV"      => {4, 3},
-    }.transform_values { |count, running| Message::Heartbeat::ModuleCount.new(count, running) }
+    }.transform_values { |count, running| Heartbeat::ModuleCount.new(count, running) }
   end
 
   class_getter metadata : Array(PlaceOS::Model::Metadata) do
@@ -70,8 +70,8 @@ module PlaceOS::Pulse
     end
   end
 
-  class_getter feature_count : Hash(Message::Heartbeat::Feature, Int32) do
-    Message::Heartbeat::Feature.values.map_with_index do |feature, index|
+  class_getter feature_count : Hash(Heartbeat::Feature, Int32) do
+    Heartbeat::Feature.values.map_with_index do |feature, index|
       {feature, index}
     end.to_h
   end

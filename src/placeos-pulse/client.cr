@@ -9,7 +9,7 @@ require "responsible"
 
 require "./constants"
 require "./error"
-require "./message/response"
+require "./response"
 
 module PlaceOS::Pulse
   include Responsible
@@ -59,7 +59,10 @@ module PlaceOS::Pulse
     end
 
     protected def heartbeat
-      put("/instances/#{instance_id}/heartbeat", Message::Heartbeat.from_database)
+      message = Heartbeat.from_database
+      put("/instances/#{instance_id}/heartbeat", HeartbeatRequest.new(
+        instance_id, saas?, message, @private_key
+      ))
     end
 
     # Register the instance.
@@ -68,29 +71,31 @@ module PlaceOS::Pulse
     #
     # The API token enables external control of the intance.
     protected def register : Nil
-      post("/register", Message::Register.generate(
+      register_message = Register.generate(
         email: email,
         instance_id: instance_id,
         public_key: @private_key.public_key.to_slice.hexstring
-      ))
+      )
+
+      post("/register", RegisterRequest.new(instance_id, saas?, register_message, @private_key))
 
       if saas?
         if (token = instance_token).nil?
           raise Error.new("Missing instance token for saas instance.")
         end
-        post("/instances/#{instance_id}/token", Message::Token.new(token))
+        token_message = Token.new(token)
+
+        post("/instances/#{instance_id}/token", TokenRequest.new(
+          instance_id, saas?, token_message, @private_key
+        ))
       end
 
       @registered = true
     end
 
-    protected def message(request : Request)
-      Message.new(instance_id, saas?, request, @private_key)
-    end
-
     {% for verb in ["post", "put"] %}
-      protected def {{ verb.id }}(path : String, request : Request)
-        HTTP::Client.{{verb.id}}(File.join(api_base, path), body: message(request).to_json).tap do |response|
+      protected def {{ verb.id }}(path : String, request : Message(T)) forall T
+        HTTP::Client.{{verb.id}}(File.join(api_base, path), body: request.to_json).tap do |response|
           unless response.status.ok? || response.status.created?
             raise Error.new(request, response)
           end

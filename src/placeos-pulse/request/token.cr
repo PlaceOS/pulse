@@ -1,7 +1,7 @@
-require "./request"
+require "../request"
 
 module PlaceOS::Pulse
-  struct Message::Token < Request
+  struct Token < Request
     getter token : String
 
     def initialize(@token)

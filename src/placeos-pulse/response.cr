@@ -4,3 +4,5 @@ module PlaceOS::Pulse
   abstract struct Response < Base
   end
 end
+
+require "./response/*"

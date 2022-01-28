@@ -1,4 +1,4 @@
-require "./message/request"
+require "./request"
 
 class PlaceOS::Pulse::Error < Exception
   def initialize(request, response)

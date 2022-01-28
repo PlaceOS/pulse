@@ -1,10 +1,10 @@
 require "placeos-models"
 require "promise"
 
-require "./request"
+require "../request"
 
 module PlaceOS::Pulse
-  struct Message::Heartbeat < Request
+  struct Heartbeat < Request
     enum Feature
       Desks
       Carparks
