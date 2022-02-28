@@ -32,7 +32,7 @@ module PlaceOS::Pulse
       false
     end
 
-    def initialize(@email, @proof_of_work, @public_key)
+    def initialize(@domain, @name, @email, @proof_of_work, @public_key)
     end
   end
 end

@@ -14,6 +14,8 @@ module PlaceOS::Pulse
 
   class_getter register_message : Register do
     Register.generate(
+      domain: MOCK_INSTANCE_DOMAIN,
+      name: MOCK_INSTANCE_NAME,
       email: MOCK_INSTANCE_EMAIL,
       instance_id: MOCK_INSTANCE_ID,
       public_key: private_key.public_key.to_slice.hexstring
