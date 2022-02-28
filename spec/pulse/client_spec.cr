@@ -6,6 +6,8 @@ module PlaceOS::Pulse
       instance_id: MOCK_INSTANCE_ID,
       instance_token: MOCK_INSTANCE_TOKEN,
       private_key: private_key,
+      domain: MOCK_INSTANCE_DOMAIN,
+      name: MOCK_INSTANCE_NAME,
       email: MOCK_INSTANCE_EMAIL,
       saas: saas,
     )
