@@ -1,12 +1,12 @@
 module PlaceOS::Pulse
-  MOCK_INSTANCE_ID      = "mock-id"
-  MOCK_INSTANCE_TOKEN   = "mock-token"
-  MOCK_INSTANCE_NAME    = "Test Instance"
-  MOCK_INSTANCE_DOMAIN  = "placeholder.com"
-  MOCK_INSTANCE_EMAIL   = "test@place.tech"
-  MOCK_PRIVATE_KEY      = "bfbd56cbd0a1e48f5766f7544b70223a7a613bb79ad0a9ef0e025f50ac7b84ab8f99e6c6e974a30389721aa4edf64ce2123dfcf741e24c50c4ccab7d89cde709"
-  API_BASE              = "#{PLACE_PORTAL_URI}/api/portal/v1"
-  ROUTE_BASE            = "/api/portal/v1/"
+  MOCK_INSTANCE_ID     = "mock-id"
+  MOCK_INSTANCE_TOKEN  = "mock-token"
+  MOCK_INSTANCE_NAME   = "Test Instance"
+  MOCK_INSTANCE_DOMAIN = "placeholder.com"
+  MOCK_INSTANCE_EMAIL  = "test@place.tech"
+  MOCK_PRIVATE_KEY     = "bfbd56cbd0a1e48f5766f7544b70223a7a613bb79ad0a9ef0e025f50ac7b84ab8f99e6c6e974a30389721aa4edf64ce2123dfcf741e24c50c4ccab7d89cde709"
+  API_BASE             = "#{PLACE_PORTAL_URI}/api/portal/v1"
+  ROUTE_BASE           = "/api/portal/v1/"
 
   class_getter private_key : Sodium::Sign::SecretKey do
     Sodium::Sign::SecretKey.new(MOCK_PRIVATE_KEY.hexbytes)
