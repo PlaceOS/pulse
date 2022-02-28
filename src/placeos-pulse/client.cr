@@ -39,6 +39,8 @@ module PlaceOS::Pulse
       @instance_id : String = ULID.generate,
       @saas : Bool = false,
       portal_uri : String = PLACE_PORTAL_URI,
+      @instance_domain : String = PLACE_DOMAIN,
+      @instance_name : String = PLACE_PULSE_INSTANCE_NAME,
       @heartbeat_interval : Time::Span = 6.hours
     )
       @private_key = case private_key
@@ -72,6 +74,8 @@ module PlaceOS::Pulse
     # The API token enables external control of the intance.
     protected def register : Nil
       register_message = Register.generate(
+        domain: @instance_domain,
+        name: @instance_name,
         email: email,
         instance_id: instance_id,
         public_key: @private_key.public_key.to_slice.hexstring

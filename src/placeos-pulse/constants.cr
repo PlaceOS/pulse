@@ -9,6 +9,13 @@ module PlaceOS::Pulse
   class_getter instance_email : String do
     required_env("PLACE_PULSE_INSTANCE_EMAIL")
   end
+  class_getter instance_name : String do
+    required_env("PLACE_PULSE_INSTANCE_NAME")
+  end
+
+  class_getter instance_domain : String do
+    required_env("PLACE_DOMAIN")
+  end
 
   class_getter instance_id : String do
     required_env("PLACE_PULSE_INSTANCE_ID")
