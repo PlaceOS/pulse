@@ -9,8 +9,8 @@ module PlaceOS::Pulse
       private_key: instance_telemetry_key,
       email: instance_email,
       instance_id: instance_id,
-      instance_domain: instance_domain,
-      instance_name: instance_name,
+      domain: instance_domain,
+      name: instance_name,
       saas: saas?
     )
   end
