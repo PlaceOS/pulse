@@ -1,4 +1,8 @@
-## Unreleased
+## v0.13.1 (2022-03-01)
+
+### Fix
+
+- resolve internally breaking change
 
 ## v0.13.0 (2022-02-28)
 
