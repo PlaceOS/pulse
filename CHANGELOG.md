@@ -1,3 +1,9 @@
+## v0.13.2 (2022-03-09)
+
+### Fix
+
+- loosen `placeos-models` constraint ([#21](https://github.com/PlaceOS/pulse/pull/21))
+
 ## v0.13.1 (2022-03-01)
 
 ### Fix
