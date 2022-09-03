@@ -47,7 +47,7 @@ module PlaceOS::Pulse
     )
       @private_key = case private_key
                      in Ed25519::SigningKey then private_key
-                     in String                  then Ed25519::SigningKey.new(private_key.hexbytes)
+                     in String              then Ed25519::SigningKey.new(private_key.hexbytes)
                      end
 
       @api_base = File.join(portal_uri, ROUTE_BASE)
