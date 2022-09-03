@@ -65,6 +65,7 @@ module PlaceOS::Pulse
   end
 
   class_getter metadata : Array(PlaceOS::Model::Metadata) do
+    puts "UPDATING METADATA MODELS"
     parent_zone = zones.first
     feature_count.map do |feature, count|
       meta = Model::Generator.metadata(parent: parent_zone)
