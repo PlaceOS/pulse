@@ -49,6 +49,8 @@ module PlaceOS::Pulse
 
     def self.feature_count
       PlaceOS::Model::Metadata.all.each_with_object(Hash(Feature, Int32).new(0)) do |metadata, count|
+        # ignore historic versions of the metadata
+        next if metadata.is_version?
         # Select for Zone metadata
         next unless metadata.parent_id.try(&.starts_with? PlaceOS::Model::Zone.table_name)
         # Select for valid feature name

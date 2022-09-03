@@ -8,8 +8,8 @@ module PlaceOS::Pulse
   API_BASE             = "#{PLACE_PORTAL_URI}/api/portal/v1"
   ROUTE_BASE           = "/api/portal/v1/"
 
-  class_getter private_key : Sodium::Sign::SecretKey do
-    Sodium::Sign::SecretKey.new(MOCK_PRIVATE_KEY.hexbytes)
+  class_getter private_key : Ed25519::SigningKey do
+    Ed25519::SigningKey.new(MOCK_PRIVATE_KEY.hexbytes)
   end
 
   class_getter register_message : Register do
@@ -18,7 +18,7 @@ module PlaceOS::Pulse
       name: MOCK_INSTANCE_NAME,
       email: MOCK_INSTANCE_EMAIL,
       instance_id: MOCK_INSTANCE_ID,
-      public_key: private_key.public_key.to_slice.hexstring
+      public_key: private_key.verify_key.to_slice.hexstring
     )
   end
 

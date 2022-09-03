@@ -1,7 +1,5 @@
 require "json"
-require "sodium"
-require "openapi-generator/serializable"
-
+require "ed25519"
 require "./constants"
 require "./request"
 require "./response"
@@ -19,28 +17,25 @@ module PlaceOS::Pulse
       @instance_id : String,
       @saas : Bool,
       @message : T,
-      private_key : Sodium::Sign::SecretKey
+      private_key : Ed25519::SigningKey
     )
-      @signature = private_key.sign_detached(@message.to_json).hexstring
+      @signature = private_key.sign(@message.to_json).hexstring
     end
 
     def self.verify_signature(public_key : String, message : String, signature : String)
-      Sodium::Sign::PublicKey.new(public_key.hexbytes).verify_detached(message, signature.hexbytes)
+      Ed25519::VerifyKey.new(public_key.hexbytes).verify!(signature.hexbytes, message)
     end
   end
 
-  # Generate classes as using the generic Message(T) struct directly does not work with
-  # elbywan's `openapi-generator`.
+  # Generate classes as using the generic Message(T) struct
   {% begin %}
     {% for request in Request.subclasses %}
       struct {{ request.name }}Request < Message({{ request }})
-        extend OpenAPI::Generator::Serializable
       end
     {% end %}
 
     {% for response in Response.subclasses %}
       struct {{ request.name }}Response < Message({{ response }})
-        extend OpenAPI::Generator::Serializable
       end
     {% end %}
   {% end %}

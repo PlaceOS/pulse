@@ -1,5 +1,5 @@
 name: placeos-pulse
-version: 0.13.2
+version: 0.14.0
 crystal: ">= 1.1.1"
 license: MIT
 authors:
@@ -10,10 +10,6 @@ authors:
 dependencies:
   hashcash:
     github: place-labs/hashcash
-
-  openapi-generator:
-    github: place-labs/openapi-generator
-    branch: master
 
   placeos-models:
     github: placeos/models
@@ -28,16 +24,15 @@ dependencies:
   secrets-env:
     github: spider-gazelle/secrets-env
 
-  sodium:
-    github: place-labs/sodium.cr
-    branch: fix/aead-chalsa-signature
-
   tasker:
     github: spider-gazelle/tasker
     version: ~> 2.0
 
   ulid:
     github: place-labs/ulid
+
+  ed25519:
+    github: spider-gazelle/ed25519
 
 development_dependencies:
   ameba:
