@@ -27,6 +27,7 @@ module PlaceOS::Pulse
     end
 
     it ".feature_count" do
+      pp! PlaceOS::Model::Metadata.all
       Heartbeat.feature_count.should eq feature_count
     end
 

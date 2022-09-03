@@ -66,7 +66,6 @@ module PlaceOS::Pulse
 
   class_getter metadata : Array(PlaceOS::Model::Metadata) do
     parent_zone = zones.first
-    Model::Metadata.clear
     feature_count.map do |feature, count|
       meta = Model::Generator.metadata(parent: parent_zone)
       meta.name = feature.to_s
