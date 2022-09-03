@@ -23,9 +23,6 @@ jobs:
         stable: [true]
         crystal:
           - latest
-        include:
-          - crystal: nightly
-            stable: false
     steps:
       - uses: crystal-lang/install-crystal@v1.5.1
         with:
