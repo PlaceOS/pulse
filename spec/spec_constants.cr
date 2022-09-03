@@ -74,7 +74,7 @@ module PlaceOS::Pulse
     end
   end
 
-  def self.feature_count : Hash(Heartbeat::Feature, Int32) do
+  def self.feature_count : Hash(Heartbeat::Feature, Int32)
     Heartbeat::Feature.values.map_with_index do |feature, index|
       {feature, index}
     end.to_h
