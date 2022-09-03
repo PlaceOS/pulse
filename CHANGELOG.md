@@ -1,3 +1,9 @@
+## v0.14.0 (2022-09-03)
+
+### Feat
+
+- remove libsodium ([#22](https://github.com/PlaceOS/pulse/pull/22))
+
 ## v0.13.2 (2022-03-09)
 
 ### Fix
@@ -30,7 +36,6 @@
 
 ### Feat
 
-- **features**: allow creation of Message::Heartbeat::Feature enums from string keys
 - **features**: allow creation of Message::Heartbeat::Feature from json
 
 ### Fix
@@ -40,7 +45,6 @@
 
 ### Refactor
 
-- **message**: make `Message` abstract on the request body
 - **message**: make `Message` abstract on the request body
 
 ## v0.10.0 (2021-10-27)
@@ -80,40 +84,15 @@
 
 ## v0.4.0 (2021-10-12)
 
-### Fix
-
-- use device modules for mocks
-
 ### Feat
 
 - add system and zone counts
 
-## v0.3.0 (2021-10-07)
-
 ### Fix
 
-- **spec**: update specs to new API
-- super instead of raise
-- missing requires
-- get code to compile
-- **pulse**: use PUT not POST to send heartbeat
-- **saas**: default saas to true as initial instances will be saas
-- **heartbeat**: fix naming and crystal client issues
-- **heartbeat**: change heartbeat route to /heartbeat
-- easy pr feedback fixes
-- constants fix
+- use device modules for mocks
 
-### Refactor
-
-- **client**: remove jwt encryption
-- generalize message, simplify client
-- counts
-- scope beneath `PlaceOS`
-- remove placeos client
-- use a single portal uri constant
-- use constant references
-- **heartbeat**: db and client methods
-- **message**: prevent any chance of _serializing the private key_
+## v0.3.0 (2021-10-07)
 
 ### Feat
 
@@ -134,3 +113,27 @@
 - enter you email
 - json blobs drafted
 - pulling in models succcessfully - WIP
+
+### Fix
+
+- **spec**: update specs to new API
+- super instead of raise
+- missing requires
+- get code to compile
+- **pulse**: use PUT not POST to send heartbeat
+- **saas**: default saas to true as initial instances will be saas
+- **heartbeat**: fix naming and crystal client issues
+- **heartbeat**: change heartbeat route to /heartbeat
+- easy pr feedback fixes
+- constants fix
+
+### Refactor
+
+- **client**: remove jwt encryption
+- generalize message, simplify client
+- scope beneath `PlaceOS`
+- remove placeos client
+- use a single portal uri constant
+- use constant references
+- **heartbeat**: db and client methods
+- **message**: prevent any chance of _serializing the private key_
