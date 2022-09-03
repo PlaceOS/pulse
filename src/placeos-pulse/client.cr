@@ -3,7 +3,7 @@ require "http/client"
 require "json"
 require "tasker"
 require "ulid"
-require "sodium"
+require "ed25519"
 
 require "responsible"
 
@@ -28,7 +28,7 @@ module PlaceOS::Pulse
     private getter heartbeat_task : Tasker::Repeat(HTTP::Client::Response)?
     private getter heartbeat_interval : Time::Span
 
-    private getter private_key : Sodium::Sign::SecretKey
+    private getter private_key : Ed25519::SigningKey
 
     getter api_base : String
 
@@ -37,7 +37,7 @@ module PlaceOS::Pulse
     def initialize(
       @instance_token : String?,
       @email : String,
-      private_key : String | Sodium::Sign::SecretKey,
+      private_key : String | Ed25519::SigningKey,
       @instance_id : String = ULID.generate,
       @saas : Bool = false,
       portal_uri : String = PLACE_PORTAL_URI,
@@ -46,8 +46,8 @@ module PlaceOS::Pulse
       @heartbeat_interval : Time::Span = 6.hours
     )
       @private_key = case private_key
-                     in Sodium::Sign::SecretKey then private_key
-                     in String                  then Sodium::Sign::SecretKey.new(private_key.hexbytes)
+                     in Ed25519::SigningKey then private_key
+                     in String                  then Ed25519::SigningKey.new(private_key.hexbytes)
                      end
 
       @api_base = File.join(portal_uri, ROUTE_BASE)
@@ -80,7 +80,7 @@ module PlaceOS::Pulse
         name: @name,
         email: email,
         instance_id: instance_id,
-        public_key: @private_key.public_key.to_slice.hexstring
+        public_key: @private_key.verify_key.to_slice.hexstring
       )
 
       post("/register", RegisterRequest.new(instance_id, saas?, register_message, @private_key))
