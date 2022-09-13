@@ -1,3 +1,9 @@
+## Unreleased
+
+### Fix
+
+- token publish only occurs on first launch ([#23](https://github.com/PlaceOS/pulse/pull/23))
+
 ## v0.14.0 (2022-09-03)
 
 ### Feat
