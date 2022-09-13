@@ -4,6 +4,7 @@ require "json"
 require "tasker"
 require "ulid"
 require "ed25519"
+require "simple_retry"
 
 require "responsible"
 
@@ -86,14 +87,21 @@ module PlaceOS::Pulse
       post("/register", RegisterRequest.new(instance_id, saas?, register_message, @private_key))
 
       if saas?
-        if (token = instance_token).nil?
-          raise Error.new("Missing instance token for saas instance.")
-        end
-        token_message = Token.new(token)
+        if token = instance_token
+          token_message = Token.new(token)
 
-        post("/instances/#{instance_id}/token", TokenRequest.new(
-          instance_id, saas?, token_message, @private_key
-        ))
+          # we really want this to succeed.
+          # on failure we should delete the API key token
+          SimpleRetry.try_to(
+            max_attempts: 20,
+            base_interval: 10.milliseconds,
+            max_interval: 10.seconds,
+          ) do
+            post("/instances/#{instance_id}/token", TokenRequest.new(
+              instance_id, saas?, token_message, @private_key
+            ))
+          end
+        end
       end
 
       @registered = true
