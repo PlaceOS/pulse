@@ -1,0 +1,43 @@
+version: "3.7"
+services:
+  test:
+    image: placeos/service-spec-runner:latest
+    volumes:
+      - ${PWD}/spec:/app/spec
+      - ${PWD}/src:/app/src
+      - ${PWD}/lib:/app/lib
+      - ${PWD}/shard.override.yml:/app/shard.override.yml
+      - ${PWD}/shard.yml:/app/shard.yml.input
+    depends_on:
+      - migrator
+      - postgres
+    environment:
+      GITHUB_ACTION: ${GITHUB_ACTION:-}
+      PG_DATABASE_URL: ${PG_DATABASE_URL:-postgresql://postgres:password@postgres:5432/pulse_dev}
+
+  postgres:
+    hostname: postgres
+    image: postgres:13-alpine
+    container_name: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: pulse_dev
+    ports:
+      - "5432:5432"
+
+  migrator:
+    build:
+      context: ${PWD}/spec/migration
+    container_name: migrator
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      GITHUB_ACTION: ${GITHUB_ACTION:-}
+      PG_DATABASE_URL: ${PG_DATABASE_URL:-postgresql://postgres:password@postgres:5432/pulse_dev}

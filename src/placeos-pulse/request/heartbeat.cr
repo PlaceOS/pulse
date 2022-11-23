@@ -29,9 +29,9 @@ module PlaceOS::Pulse
 
     getter feature_count : Hash(Feature, Int32)
 
-    getter zone_count : Int32
+    getter zone_count : Int64
 
-    getter system_count : Int32
+    getter system_count : Int64
 
     record ModuleCount, count : Int32, running : Int32 do
       include JSON::Serializable
@@ -94,8 +94,8 @@ module PlaceOS::Pulse
     def initialize(
       @feature_count : Hash(Feature, Int32),
       @module_instances : Hash(String, ModuleCount),
-      @zone_count : Int32,
-      @system_count : Int32
+      @zone_count : Int64,
+      @system_count : Int64
     )
     end
   end
