@@ -1,4 +1,10 @@
-## Unreleased
+## v1.0.1 (2023-03-16)
+
+### Refactor
+
+- migrate to pg-orm models ([#24](https://github.com/PlaceOS/pulse/pull/24))
+
+## v1.0.0 (2022-09-13)
 
 ### Fix
 
