@@ -8,30 +8,4 @@ jobs:
     uses: PlaceOS/.github/.github/workflows/crystal-style.yml@main
 
   test:
-    runs-on: ubuntu-latest
-    name: "${{ !matrix.stable && '🚧 ' || ''}}crystal: ${{ matrix.crystal }}"
-    continue-on-error: ${{ !matrix.stable }}
-    services:
-      rethink:
-        image: rethinkdb:2.4
-        ports:
-        - 29015:29015
-        - 28015:28015
-    strategy:
-      fail-fast: false
-      matrix:
-        stable: [true]
-        crystal:
-          - latest
-        include:
-          - crystal: nightly
-            stable: false
-    steps:
-      - uses: crystal-lang/install-crystal@v1.5.1
-        with:
-          crystal: ${{ matrix.crystal }}
-      - uses: actions/checkout@v2
-      - name: Install dependencies
-        run: shards install
-      - name: Run tests
-        run: crystal spec --error-trace --verbose --order random
+    uses: PlaceOS/.github/.github/workflows/containerised-test.yml@main
