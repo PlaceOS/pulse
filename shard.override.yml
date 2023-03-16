@@ -5,7 +5,3 @@ dependencies:
   CrystalEmail:
     github: place-labs/CrystalEmail
     branch: master
-
-  placeos-models:
-    github: placeos/models
-    branch: refactor/pg-migration

@@ -13,7 +13,7 @@ dependencies:
 
   placeos-models:
     github: placeos/models
-    version: ">= 6.0"
+    version: ">= 9.0"
 
   promise:
     github: spider-gazelle/promise
