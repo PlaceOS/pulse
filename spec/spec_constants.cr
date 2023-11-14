@@ -61,7 +61,7 @@ module PlaceOS::Pulse
       "Special" => {2, 1},
       "Printer" => {1, 0},
       "TV"      => {4, 3},
-    }.transform_values { |count, running| Heartbeat::ModuleCount.new(count, running) }
+    }.transform_values { |(count, running)| Heartbeat::ModuleCount.new(count, running) }
   end
 
   class_getter metadata : Array(PlaceOS::Model::Metadata) do
