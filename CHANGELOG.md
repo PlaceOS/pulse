@@ -1,3 +1,9 @@
+## v1.0.2 (2023-11-14)
+
+### Refactor
+
+- Fixing transform_values changed semantics
+
 ## v1.0.1 (2023-03-16)
 
 ### Refactor
