@@ -76,7 +76,7 @@ module PlaceOS::Pulse
           count += 1
           running += 1 if mod.running
           tally[mod.name] = {count, running}
-        end.transform_values { |count, running| ModuleCount.new(count, running) }
+        end.transform_values { |(count, running)| ModuleCount.new(count, running) }
     end
 
     def self.from_database
