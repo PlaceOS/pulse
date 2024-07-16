@@ -65,7 +65,7 @@ module PlaceOS::Pulse
 
     protected def heartbeat
       message = Heartbeat.from_database
-      put("/instances/#{instance_id}/heartbeat", HeartbeatRequest.new(
+      put("/instances/#{instance_id}/heartbeat", PlaceOS::Pulse::HeartbeatRequest.new(
         instance_id, saas?, message, @private_key
       ))
     end
@@ -84,7 +84,7 @@ module PlaceOS::Pulse
         public_key: @private_key.verify_key.to_slice.hexstring
       )
 
-      post("/register", RegisterRequest.new(instance_id, saas?, register_message, @private_key))
+      post("/register", PlaceOS::Pulse::RegisterRequest.new(instance_id, saas?, register_message, @private_key))
 
       if saas?
         if token = instance_token
@@ -97,7 +97,7 @@ module PlaceOS::Pulse
             base_interval: 10.milliseconds,
             max_interval: 10.seconds,
           ) do
-            post("/instances/#{instance_id}/token", TokenRequest.new(
+            post("/instances/#{instance_id}/token", PlaceOS::Pulse::TokenRequest.new(
               instance_id, saas?, token_message, @private_key
             ))
           end

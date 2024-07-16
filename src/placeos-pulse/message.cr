@@ -30,12 +30,12 @@ module PlaceOS::Pulse
   # Generate classes as using the generic Message(T) struct
   {% begin %}
     {% for request in Request.subclasses %}
-      struct {{ request.name }}Request < Message({{ request }})
+      struct {{ request.name }}Request < Message(::{{ request }})
       end
     {% end %}
 
     {% for response in Response.subclasses %}
-      struct {{ request.name }}Response < Message({{ response }})
+      struct {{ request.name }}Response < Message(::{{ response }})
       end
     {% end %}
   {% end %}

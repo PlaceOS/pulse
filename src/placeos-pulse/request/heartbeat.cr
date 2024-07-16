@@ -40,19 +40,19 @@ module PlaceOS::Pulse
     getter module_instances : Hash(String, ModuleCount)
 
     def self.system_count
-      PlaceOS::Model::ControlSystem.count
+      ::PlaceOS::Model::ControlSystem.count
     end
 
     def self.zone_count
-      PlaceOS::Model::Zone.count
+      ::PlaceOS::Model::Zone.count
     end
 
     def self.feature_count
-      PlaceOS::Model::Metadata.all.each_with_object(Hash(Feature, Int32).new(0)) do |metadata, count|
+      ::PlaceOS::Model::Metadata.all.each_with_object(Hash(Feature, Int32).new(0)) do |metadata, count|
         # ignore historic versions of the metadata
         next if metadata.is_version?
         # Select for Zone metadata
-        next unless metadata.parent_id.try(&.starts_with? PlaceOS::Model::Zone.table_name)
+        next unless metadata.parent_id.try(&.starts_with? ::PlaceOS::Model::Zone.table_name)
         # Select for valid feature name
         next unless feature = Feature.parse? metadata.name
 
@@ -69,7 +69,7 @@ module PlaceOS::Pulse
     end
 
     def self.module_instances
-      PlaceOS::Model::Module
+      ::PlaceOS::Model::Module
         .all
         .each_with_object(Hash(String, Tuple(Int32, Int32)).new { |h, k| h[k] = {0, 0} }) do |mod, tally|
           count, running = tally[mod.name]
