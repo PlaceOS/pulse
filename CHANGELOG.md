@@ -1,3 +1,9 @@
+## Unreleased
+
+### Fix
+
+- add crystal 1.13 support
+
 ## v1.0.2 (2023-11-14)
 
 ### Refactor
